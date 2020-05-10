@@ -3,4 +3,4 @@
 4th Place Solution for [Mercari Price Suggestion Challenge on Kaggle](https://www.kaggle.com/c/mercari-price-suggestion-challenge)
 
 ## The Challenge
-Build a model to suggest the price of product on Mercari. The model is required to train (including all the preprocessing, feature extraction and model training steps) and inference within 1 hour, using only 4 cores cpu, 16GB RAM, 1GB disk. Data include unstructured text (product title & description) and structured ones, e.g.
+Build a model to suggest the price of product on Mercari. The model is required to train (including all the preprocessing, feature extraction and model training steps) and inference within 1 hour, using only 4 cores cpu, 16GB RAM, 1GB disk. Data include unstructured text (product title & description) and structured ones, e.g., product category
