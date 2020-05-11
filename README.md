@@ -6,4 +6,4 @@
 Build a model to suggest the price of product on Mercari. The model is required to train (including all the preprocessing, feature extraction and model training steps) and inference within 1 hour, using only 4 cores cpu, 16GB RAM, 1GB disk. Data include unstructured text (product title & description) and structured ones, e.g., product category and shipping flag etc.
 
 ## Summary
-Highlights o
+Highlights of our method are
