@@ -8,4 +8,4 @@ Build a model to suggest the price of product on Mercari. The model is required 
 ## Summary
 Highlights of our method are as follows:
 
-* very minimum preprocessing with focus on end-to-end learning with 
+* very minimum preprocessing with focus on end-to-end learning with multi-field inputs, e.g
