@@ -12,3 +12,5 @@ Highlights of our method are as follows:
 * hybrid NN consists of four major compoments, i.e., embed, encode, attend and predict. FastText and NN based FM are used as building block;
 * purely bagging of NNs of the same architecture via snapshot ensemble;
 * efficiency is achieved via various approaches, e.g., lazynadam optimization, fasttext encoding and average pooling, snapshot ensemble, etc.
+
+### Model Architectur
