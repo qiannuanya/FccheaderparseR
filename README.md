@@ -13,4 +13,5 @@ Highlights of our method are as follows:
 * purely bagging of NNs of the same architecture via snapshot ensemble;
 * efficiency is achieved via various approaches, e.g., lazynadam optimization, fasttext encoding and average pooling, snapshot ensemble, etc.
 
-### Model Architectur
+### Model Architecture
+![fig/architecture.
