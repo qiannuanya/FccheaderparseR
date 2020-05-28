@@ -16,4 +16,4 @@ Highlights of our method are as follows:
 ### Model Architecture
 ![fig/architecture.png](fig/architecture.png)
 
-Please
+Please find the slide o
