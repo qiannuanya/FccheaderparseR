@@ -16,4 +16,4 @@ Highlights of our method are as follows:
 ### Model Architecture
 ![fig/architecture.png](fig/architecture.png)
 
-Please find the slide of our solution [here](./doc/Mercari_Price_Suggesion_Competit
+Please find the slide of our solution [here](./doc/Mercari_Price_Suggesion_Competition_ChenglongChen_
