@@ -19,4 +19,4 @@ Highlights of our method are as follows:
 Please find the slide of our solution [here](./doc/Mercari_Price_Suggesion_Competition_ChenglongChen_4th_Place.pdf).
 
 ## About this project
-This is the 4th text mining competition
+This is the 4th text mining competition I have attend on Kaggle
