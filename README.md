@@ -21,4 +21,5 @@ Please find the slide of our solution [here](./doc/Mercari_Price_Suggesion_Compe
 ## About this project
 This is the 4th text mining competition I have attend on Kaggle. The other three are:
 
-* [CrowdFlower Search Results Relevance Competition](https://www.kaggle.com/c/crowdflower-search-rele
+* [CrowdFlower Search Results Relevance Competition](https://www.kaggle.com/c/crowdflower-search-relevance), 1st Place
+*
