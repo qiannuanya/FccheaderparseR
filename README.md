@@ -22,4 +22,4 @@ Please find the slide of our solution [here](./doc/Mercari_Price_Suggesion_Compe
 This is the 4th text mining competition I have attend on Kaggle. The other three are:
 
 * [CrowdFlower Search Results Relevance Competition](https://www.kaggle.com/c/crowdflower-search-relevance), 1st Place
-* [Home Depot Product Search Relevance C
+* [Home Depot Product Search Relevance Competition](http
