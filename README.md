@@ -23,4 +23,4 @@ This is the 4th text mining competition I have attend on Kaggle. The other three
 
 * [CrowdFlower Search Results Relevance Competition](https://www.kaggle.com/c/crowdflower-search-relevance), 1st Place
 * [Home Depot Product Search Relevance Competition](https://www.kaggle.com/c/home-depot-product-search-relevance), 3rd Place
-* [The Hunt for Prohibited Content Competition](http://www.kaggle.com/c/avito-prohibit
+* [The Hunt for Prohibited Content Competition](http://www.kaggle.com/c/avito-prohibited-content), 4th Pl
