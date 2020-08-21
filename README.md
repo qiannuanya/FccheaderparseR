@@ -25,4 +25,4 @@ This is the 4th text mining competition I have attend on Kaggle. The other three
 * [Home Depot Product Search Relevance Competition](https://www.kaggle.com/c/home-depot-product-search-relevance), 3rd Place
 * [The Hunt for Prohibited Content Competition](http://www.kaggle.com/c/avito-prohibited-content), 4th Place
 
-In these previous competitions, I took the general ML based methods, i.e., data cleaning, feature engineering (see the solutions of [CrowdFlower](https://github.com/ChenglongChen/Kaggle_CrowdFlower) and [HomeDepot](https://github.com/ChenglongChen/Kaggle_HomeDepot) for how many features have been engineered), VW/XGBoost training, and massive
+In these previous competitions, I took the general ML based methods, i.e., data cleaning, feature engineering (see the solutions of [CrowdFlower](https://github.com/ChenglongChen/Kaggle_CrowdFlower) and [HomeDepot](https://github.com/ChenglongChen/Kaggle_HomeDepot) for how many features have been engineered), VW/XGBoost training, and massive ensembling. 
