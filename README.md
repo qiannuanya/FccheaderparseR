@@ -27,4 +27,4 @@ This is the 4th text mining competition I have attend on Kaggle. The other three
 
 In these previous competitions, I took the general ML based methods, i.e., data cleaning, feature engineering (see the solutions of [CrowdFlower](https://github.com/ChenglongChen/Kaggle_CrowdFlower) and [HomeDepot](https://github.com/ChenglongChen/Kaggle_HomeDepot) for how many features have been engineered), VW/XGBoost training, and massive ensembling. 
 
-Since I have been working on CTR & KBQA based on deeplearning and embedding models for some time, I decided to give this competition a shot. With data o
+Since I have been working on CTR & KBQA based on deeplearning and embedding models for some time, I decided to give this competition a shot. With data of this compet
