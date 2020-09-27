@@ -14,3 +14,15 @@ def _cosine_decay_restarts(learning_rate, global_step, first_decay_steps,
     completed_fraction = global_step / first_decay_steps
 
     def compute_step(completed_fraction, geometric=False):
+        if geometric:
+            i_restart = np.floor(np.log(1.0 - completed_fraction * (
+                    1.0 - t_mul)) / np.log(t_mul))
+
+            sum_r = (1.0 - t_mul ** i_restart) / (1.0 - t_mul)
+            completed_fraction = (completed_fraction - sum_r) / t_mul ** i_restart
+
+        else:
+            i_restart = np.floor(completed_fraction)
+            completed_fraction = completed_fraction - i_restart
+
+        return i_restart, completed_fraction
