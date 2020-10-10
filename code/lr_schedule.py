@@ -26,3 +26,17 @@ def _cosine_decay_restarts(learning_rate, global_step, first_decay_steps,
             completed_fraction = completed_fraction - i_restart
 
         return i_restart, completed_fraction
+
+    geometric = t_mul != 1.0
+    i_restart, completed_fraction = compute_step(completed_fraction, geometric)
+    m_fac = m_mul ** i_restart
+
+    # noise
+    variance = initial_variance / (np.power(1.0 + global_step, variance_decay))
+    std = np.sqrt(variance)
+    noisy_m_fac = m_fac + np.random.normal(0.0, std)
+
+    cosine_decayed = 0.5 * noisy_m_fac * (1.0 + np.cos(math.pi * completed_fraction))
+    decayed = (1 - alpha) * cosine_decayed + alpha
+
+    return learning_rate * decayed
