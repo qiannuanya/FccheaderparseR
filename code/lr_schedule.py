@@ -40,3 +40,11 @@ def _cosine_decay_restarts(learning_rate, global_step, first_decay_steps,
     decayed = (1 - alpha) * cosine_decayed + alpha
 
     return learning_rate * decayed
+
+
+def _exponential_decay(learning_rate, global_step, decay_steps, decay_rate,
+                       staircase=False):
+    p = global_step / decay_steps
+    if staircase:
+        p = np.floor(p)
+    return learning_rate * np.power(decay_rate, p)
