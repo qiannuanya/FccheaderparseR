@@ -29,3 +29,21 @@ from collections import Counter, defaultdict
 from hashlib import md5
 
 from fastcache import clru_cache as lru_cache
+
+from hyperopt import fmin, tpe, hp, STATUS_OK, Trials, space_eval
+from nltk import pos_tag
+from nltk.corpus import wordnet
+from nltk import ToktokTokenizer
+
+from multiprocessing import Pool
+
+from six.moves import range
+from six.moves import zip
+
+if sys.version_info < (3,):
+    maketrans = string.maketrans
+else:
+    maketrans = str.maketrans
+
+from sklearn.linear_model import LinearRegression
+from sklearn.preprocessing import LabelBinarizer
