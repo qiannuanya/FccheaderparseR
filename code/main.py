@@ -47,3 +47,15 @@ else:
 
 from sklearn.linear_model import LinearRegression
 from sklearn.preprocessing import LabelBinarizer
+
+from keras.preprocessing.sequence import pad_sequences
+
+from metrics import rmse
+from topk import top_k_selector
+from xnn import XNN
+from utils import _get_logger, _makedirs, _timestamp
+
+
+##############################################################################
+_makedirs("./log")
+logger = _get_logger("./log", "hyperopt-%s.log" % _timestamp())
