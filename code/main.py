@@ -59,3 +59,27 @@ from utils import _get_logger, _makedirs, _timestamp
 ##############################################################################
 _makedirs("./log")
 logger = _get_logger("./log", "hyperopt-%s.log" % _timestamp())
+
+##############################################################################
+
+RUNNING_MODE = "validation"
+# RUNNING_MODE = "submission"
+DEBUG = False
+DUMP_DATA = True
+USE_PREPROCESSED_DATA = True
+
+USE_MULTITHREAD = False
+if RUNNING_MODE == "submission":
+    N_JOBS = 4
+else:
+    N_JOBS = 4
+NUM_PARTITIONS = 32
+
+DEBUG_SAMPLE_NUM = 200000
+LRU_MAXSIZE = 2 ** 16
+
+#######################################
+# File
+MISSING_VALUE_STRING = "MISSINGVALUE"
+DROP_ZERO_PRICE = True
+#######################################
