@@ -102,3 +102,20 @@ WORDREPLACER_DICT = {
     "bnwt": "brand new with tags",
     "nwt": "new with tags",
     "bnwot": "brand new without tags",
+    "nwot": "new without tags",
+    "bnip": "brand new in packet",
+    "nip": "new in packet",
+    "bnib": "brand new in box",
+    "nib": "new in box",
+    "mib": "mint in box",
+    "mwob": "mint without box",
+    "mip": "mint in packet",
+    "mwop": "mint without packet"
+}
+
+BRAND_NAME_PATTERN_LIST = [
+    ("nike", "nike"),
+    ("pink", "pink"),
+    ("apple", "iphone|ipod|ipad|iwatch|apple|mac"),
+    ("victoria's secret", "victoria"),
+    ("lularoe", "lularoe"),
