@@ -83,3 +83,22 @@ LRU_MAXSIZE = 2 ** 16
 MISSING_VALUE_STRING = "MISSINGVALUE"
 DROP_ZERO_PRICE = True
 #######################################
+
+
+# Preprocessing
+USE_SPACY_TOKENIZER = False
+USE_NLTK_TOKENIZER = False
+USE_KAGGLE_TOKENIZER = False
+# default: '!"#$%&()*+,-./:;<=>?@[\\]^_`{|}~\t\n'
+KERAS_TOKENIZER_FILTERS = '\'!"#%&()*+,-/:;<=>?@[\\]^_`{|}~\t\n'
+KERAS_TOKENIZER_FILTERS = ""
+KERAS_SPLIT = " "
+
+USE_LEMMATIZER = False
+USE_STEMMER = False
+USE_CLEAN = True
+
+WORDREPLACER_DICT = {
+    "bnwt": "brand new with tags",
+    "nwt": "new with tags",
+    "bnwot": "brand new without tags",
