@@ -119,3 +119,24 @@ BRAND_NAME_PATTERN_LIST = [
     ("apple", "iphone|ipod|ipad|iwatch|apple|mac"),
     ("victoria's secret", "victoria"),
     ("lularoe", "lularoe"),
+    ("nintendo", "nintendo"),
+    ("lululemon", "lululemon"),
+    ("forever 21", "forever\s+21|forever\s+twenty\s+one"),
+    ("michael kors", "michael\s+kors"),
+    ("american eagle", "american\s+eagle"),
+    ("rae dunn", "rae dunn"),
+]
+
+# word count |   #word
+#    >= 1    |  195523
+#    >= 2    |   93637
+#    >= 3    |   67498
+#    >= 4    |   56265
+#    >= 5    |   49356
+MAX_NUM_WORDS = 80000
+MAX_NUM_BIGRAMS = 50000
+MAX_NUM_TRIGRAMS = 50000
+MAX_NUM_SUBWORDS = 20000
+
+NUM_TOP_WORDS_NAME = 50
+NUM_TOP_WORDS_ITEM_DESC = 50
