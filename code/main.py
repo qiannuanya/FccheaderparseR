@@ -140,3 +140,18 @@ MAX_NUM_SUBWORDS = 20000
 
 NUM_TOP_WORDS_NAME = 50
 NUM_TOP_WORDS_ITEM_DESC = 50
+
+MAX_CATEGORY_NAME_LEN = 3
+
+EXTRACTED_BIGRAM = True
+EXTRACTED_TRIGRAM = True
+EXTRACTED_SUBWORD = False
+VOCAB_HASHING_TRICK = False
+
+######################
+
+####################################################################
+HYPEROPT_MAX_EVALS = 1
+
+param_space_com = {
+    "RUNNING_MODE": RUNNING_MODE,
