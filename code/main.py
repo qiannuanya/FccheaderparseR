@@ -191,3 +191,13 @@ param_space_best = {
     #### params for input
     # bigram/trigram/subword
     "use_bigram": True,
+    "use_trigram": True,
+    "use_subword": False,
+
+    # seq len
+    "max_sequence_length_name": 10,
+    "max_sequence_length_item_desc": 50,
+    "max_sequence_length_category_name": 10,
+    "max_sequence_length_item_desc_subword": 45,
+
+    #### params for embed
