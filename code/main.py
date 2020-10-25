@@ -155,3 +155,22 @@ HYPEROPT_MAX_EVALS = 1
 
 param_space_com = {
     "RUNNING_MODE": RUNNING_MODE,
+    # size for the attention block
+    "MAX_NUM_WORDS": MAX_NUM_WORDS,
+    "MAX_NUM_BIGRAMS": MAX_NUM_BIGRAMS,
+    "MAX_NUM_TRIGRAMS": MAX_NUM_TRIGRAMS,
+    "MAX_NUM_SUBWORDS": MAX_NUM_SUBWORDS,
+
+    "model_dir": "./weights",
+
+    "item_condition_size": 5,
+    "shipping_size": 1,
+    "num_vars_size": 3,
+    # pad_sequences
+    "pad_sequences_padding": "post",
+    "pad_sequences_truncating": "post",
+    # optimization
+    "optimizer_clipnorm": 1.,
+    "batch_size_train": 512,
+    "batch_size_inference": 512*2,
+    "shuffle_with_replacement": False,
