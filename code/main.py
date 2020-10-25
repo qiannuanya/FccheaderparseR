@@ -174,3 +174,20 @@ param_space_com = {
     "batch_size_train": 512,
     "batch_size_inference": 512*2,
     "shuffle_with_replacement": False,
+    # CyclicLR
+    "t_mul": 1,
+    "snapshot_every_num_cycle": 128,
+    "max_snapshot_num": 14,
+    "snapshot_every_epoch": 4,  # for t_mult != 1
+    "eval_every_num_update": 1000,
+    # static param
+    "random_seed": 2018,
+    "n_folds": 1,
+    "validation_ratio": 0.4,
+}
+
+param_space_best = {
+
+    #### params for input
+    # bigram/trigram/subword
+    "use_bigram": True,
