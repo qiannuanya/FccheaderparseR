@@ -201,3 +201,19 @@ param_space_best = {
     "max_sequence_length_item_desc_subword": 45,
 
     #### params for embed
+    "embedding_dim": 250,
+    "embedding_dropout": 0.,
+    "embedding_mask_zero": False,
+    "embedding_mask_zero_subword": False,
+
+    #### params for encode
+    "encode_method": "fasttext",
+    # cnn
+    "cnn_num_filters": 16,
+    "cnn_filter_sizes": [2, 3],
+    "cnn_timedistributed": False,
+    # rnn
+    "rnn_num_units": 16,
+    "rnn_cell_type": "gru",
+    #### params for attend
+    "attend_method": "ave",
