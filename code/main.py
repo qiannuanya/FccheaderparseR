@@ -217,3 +217,13 @@ param_space_best = {
     "rnn_cell_type": "gru",
     #### params for attend
     "attend_method": "ave",
+
+    #### params for predict
+    # deep
+    "enable_deep": True,
+    # fm
+    "enable_fm_first_order": True,
+    "enable_fm_second_order": True,
+    "enable_fm_higher_order": False,
+    # fc block
+    "fc_type": "fc",
