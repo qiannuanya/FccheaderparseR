@@ -242,3 +242,28 @@ param_space_best = {
     "snapshot_before_restarts": 4,
     "beta1": 0.975,
     "beta2": 0.999,
+    "schedule_decay": 0.004,
+    # "lr_schedule": "exponential_decay",
+    "lr_schedule": "cosine_decay_restarts",
+    "epoch": 4,
+    # CyclicLR
+    "num_cycle_each_epoch": 8,
+
+    #### params ensemble
+    "enable_snapshot_ensemble": True,
+    "n_runs": 2,
+
+}
+param_space_best.update(param_space_com)
+if RUNNING_MODE == "submission":
+    EXTRACTED_BIGRAM = param_space_best["use_bigram"]
+    EXTRACTED_SUBWORD = param_space_best["use_subword"]
+
+param_space_hyperopt = param_space_best
+
+int_params = [
+    "max_sequence_length_name",
+    "max_sequence_length_item_desc",
+    "max_sequence_length_item_desc_subword",
+    "max_sequence_length_category_name",
+    "embedding_dim", "embedding_dim",
