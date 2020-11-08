@@ -227,3 +227,18 @@ param_space_best = {
     "enable_fm_higher_order": False,
     # fc block
     "fc_type": "fc",
+    "fc_dim": 64,
+    "fc_dropout": 0.,
+
+    #### params for optimization
+    "optimizer_type": "nadam",  # "nadam",  # ""lazyadam", "nadam"
+    "max_lr_exp": 0.005,
+    "lr_decay_each_epoch_exp": 0.9,
+    "lr_jump_exp": True,
+    "max_lr_cosine": 0.005,
+    "base_lr": 0.00001,  # minimum lr
+    "lr_decay_each_epoch_cosine": 0.5,
+    "lr_jump_rate": 1.,
+    "snapshot_before_restarts": 4,
+    "beta1": 0.975,
+    "beta2": 0.999,
