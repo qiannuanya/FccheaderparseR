@@ -285,3 +285,25 @@ if DEBUG:
 ####################################################################################################
 def mmh3_hash_function(x):
     return mmh3.hash(x, 42, signed=True)
+
+
+def md5_hash_function(x):
+    return int(md5(x.encode()).hexdigest(), 16)
+
+
+@lru_cache(LRU_MAXSIZE)
+def hashing_trick(string, n, hash_function="mmh3"):
+    if hash_function == "mmh3":
+        hash_function = mmh3_hash_function
+    elif hash_function == "md5":
+        hash_function = md5_hash_function
+    i = (hash_function(string) % n) + 1
+    return i
+
+
+# 5.67 µs ± 78.2 ns per loop (mean ± std. dev. of 7 runs, 100000 loops each)
+@lru_cache(LRU_MAXSIZE)
+def get_subword_for_word_all(word, n1=3, n2=6):
+    z = []
+    z_append = z.append
+    word = "*" + word + "*"
