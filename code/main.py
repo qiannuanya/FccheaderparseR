@@ -267,3 +267,21 @@ int_params = [
     "max_sequence_length_item_desc_subword",
     "max_sequence_length_category_name",
     "embedding_dim", "embedding_dim",
+    "cnn_num_filters", "rnn_num_units", "fc_dim",
+    "epoch", "n_runs",
+    "num_cycle_each_epoch", "t_mul", "snapshot_every_num_cycle",
+]
+int_params = set(int_params)
+
+if DEBUG:
+    param_space_hyperopt["num_cycle_each_epoch"] = param_space_best["num_cycle_each_epoch"] = 2
+    param_space_hyperopt["snapshot_every_num_cycle"] = param_space_best["snapshot_every_num_cycle"] = 1
+    param_space_hyperopt["batch_size_train"] = param_space_best["batch_size_train"] = 512
+    param_space_hyperopt["batch_size_inference"] = param_space_best["batch_size_inference"] = 512
+
+
+####################################################################################################
+########################################### NLP ####################################################
+####################################################################################################
+def mmh3_hash_function(x):
+    return mmh3.hash(x, 42, signed=True)
