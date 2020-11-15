@@ -335,3 +335,17 @@ def get_subword_for_word_all0(word, n1=3, n2=6):
                 else:
                     if 2 * i + k < l:
                         z_append(word[i:(i + k)])
+                        z_append(word[-(i + k + 1):-i])
+                    elif 2 * (i - 1) + n2 < l:
+                        z_append(word[i:(i + k)])
+    return z
+
+
+# 3.44 µs ± 101 ns per loop (mean ± std. dev. of 7 runs, 100000 loops each)
+@lru_cache(LRU_MAXSIZE)
+def get_subword_for_word0(word, n1=4, n2=5, include_self=False):
+    """only extract the prefix and suffix"""
+    l = len(word)
+    n1 = min(n1, l)
+    n2 = min(n2, l)
+    z1 = [word[:k] for k in range(n1, n2 + 1)]
