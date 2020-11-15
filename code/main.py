@@ -307,3 +307,21 @@ def get_subword_for_word_all(word, n1=3, n2=6):
     z = []
     z_append = z.append
     word = "*" + word + "*"
+    l = len(word)
+    z_append(word)
+    for k in range(n1, n2 + 1):
+        for i in range(l - k + 1):
+            z_append(word[i:i + k])
+    return z
+
+
+@lru_cache(LRU_MAXSIZE)
+def get_subword_for_word_all0(word, n1=3, n2=6):
+    z = []
+    z_append = z.append
+    word = "*" + word + "*"
+    l = len(word)
+    z_append(word)
+    if l > n1:
+        n2 = min(n2, l - 1)
+        for i in range(l - n1 + 1):
