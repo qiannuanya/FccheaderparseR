@@ -325,3 +325,13 @@ def get_subword_for_word_all0(word, n1=3, n2=6):
     if l > n1:
         n2 = min(n2, l - 1)
         for i in range(l - n1 + 1):
+            for k in range(n1, n2 + 1):
+                if 2 * i + n2 < l:
+                    z_append(word[i:(i + k)])
+                    if i == 0:
+                        z_append(word[-(i + k + 1):])
+                    else:
+                        z_append(word[-(i + k + 1):-i])
+                else:
+                    if 2 * i + k < l:
+                        z_append(word[i:(i + k)])
