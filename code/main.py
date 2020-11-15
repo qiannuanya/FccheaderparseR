@@ -349,3 +349,28 @@ def get_subword_for_word0(word, n1=4, n2=5, include_self=False):
     n1 = min(n1, l)
     n2 = min(n2, l)
     z1 = [word[:k] for k in range(n1, n2 + 1)]
+    z2 = [word[-k:] for k in range(n1, n2 + 1)]
+    z = z1 + z2
+    if include_self:
+        z.append(word)
+    return z
+
+
+# 2.49 µs ± 104 ns per loop (mean ± std. dev. of 7 runs, 100000 loops each)
+@lru_cache(LRU_MAXSIZE)
+def get_subword_for_word(word, n1=3, n2=6, include_self=False):
+    """only extract the prefix and suffix"""
+    z = []
+    if len(word) >= n1:
+        word = "*" + word + "*"
+        l = len(word)
+        n1 = min(n1, l)
+        n2 = min(n2, l)
+        # bind method outside of loop to reduce overhead
+        # https://github.com/scikit-learn/scikit-learn/blob/a24c8b46/sklearn/feature_extraction/text.py#L144
+        z_append = z.append
+        if include_self:
+            z_append(word)
+        for k in range(n1, n2 + 1):
+            z_append(word[:k])
+            z_append(word[-k:])
