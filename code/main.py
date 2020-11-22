@@ -374,3 +374,18 @@ def get_subword_for_word(word, n1=3, n2=6, include_self=False):
         for k in range(n1, n2 + 1):
             z_append(word[:k])
             z_append(word[-k:])
+    return z
+
+
+# 564 µs ± 14.9 µs per loop (mean ± std. dev. of 7 runs, 1000 loops each)
+def get_subword_for_list0(input_list, n1=4, n2=5):
+    subword_lst = [get_subword_for_word(w, n1, n2) for w in input_list]
+    subword_lst = [w for ws in subword_lst for w in ws]
+    return subword_lst
+
+
+# 505 µs ± 15 µs per loop (mean ± std. dev. of 7 runs, 1000 loops each)
+def get_subword_for_list(input_list, n1=4, n2=5):
+    subwords = []
+    subwords_extend = subwords.extend
+    for w in input_list:
