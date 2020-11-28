@@ -389,3 +389,13 @@ def get_subword_for_list(input_list, n1=4, n2=5):
     subwords = []
     subwords_extend = subwords.extend
     for w in input_list:
+        subwords_extend(get_subword_for_word(w, n1, n2))
+    return subwords
+
+
+@lru_cache(LRU_MAXSIZE)
+def get_subword_for_text(text, n1=4, n2=5):
+    return get_subword_for_list(text.split(" "), n1, n2)
+
+
+stopwords = [
