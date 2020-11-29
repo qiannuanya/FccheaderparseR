@@ -418,3 +418,17 @@ stopwords = [
     "my",
 ]
 stopwords = set(stopwords)
+
+
+# spacy model
+class SpacyTokenizer(object):
+    def __init__(self):
+        self.nlp = spacy.load("en", disable=["parser", "tagger", "ner"])
+
+    def tokenize(self, text):
+        tokens = [tok.lower_ for tok in self.nlp(text)]
+        # tokens = get_valid_words(tokens)
+        return tokens
+
+
+LEMMATIZER = nltk.stem.wordnet.WordNetLemmatizer()
