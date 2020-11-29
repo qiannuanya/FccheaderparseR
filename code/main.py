@@ -399,3 +399,22 @@ def get_subword_for_text(text, n1=4, n2=5):
 
 
 stopwords = [
+    "and",
+    "the",
+    "for",
+    "a",
+    "in",
+    "to",
+    "is",
+    # "s",
+    "of",
+    "i",
+    "on",
+    "it",
+    "you",
+    "your",
+    "are",
+    "this",
+    "my",
+]
+stopwords = set(stopwords)
