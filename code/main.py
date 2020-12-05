@@ -432,3 +432,21 @@ class SpacyTokenizer(object):
 
 
 LEMMATIZER = nltk.stem.wordnet.WordNetLemmatizer()
+STEMMER = nltk.stem.snowball.EnglishStemmer()
+TOKTOKTOKENIZER = ToktokTokenizer()
+
+
+# SPACYTOKENIZER = SpacyTokenizer()
+
+
+def get_wordnet_pos(treebank_tag):
+    if treebank_tag.startswith('J'):
+        return wordnet.ADJ
+    elif treebank_tag.startswith('V'):
+        return wordnet.VERB
+    elif treebank_tag.startswith('N'):
+        return wordnet.NOUN
+    elif treebank_tag.startswith('R'):
+        return wordnet.ADV
+    else:
+        return None
