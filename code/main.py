@@ -450,3 +450,28 @@ def get_wordnet_pos(treebank_tag):
         return wordnet.ADV
     else:
         return None
+
+
+def get_valid_words(sentence):
+    res = [w.strip() for w in sentence]
+    return [w for w in res if w]
+
+
+@lru_cache(LRU_MAXSIZE)
+def stem_word(word):
+    return STEMMER.stem(word)
+
+
+@lru_cache(LRU_MAXSIZE)
+def lemmatize_word(word, pos=wordnet.NOUN):
+    return LEMMATIZER.lemmatize(word, pos)
+
+
+def stem_sentence(sentence):
+    return [stem_word(w) for w in get_valid_words(sentence)]
+
+
+def lemmatize_sentence(sentence):
+    res = []
+    sentence_ = get_valid_words(sentence)
+    for word, pos in pos_tag(sentence_):
