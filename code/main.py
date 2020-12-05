@@ -475,3 +475,22 @@ def lemmatize_sentence(sentence):
     res = []
     sentence_ = get_valid_words(sentence)
     for word, pos in pos_tag(sentence_):
+        wordnet_pos = get_wordnet_pos(pos) or wordnet.NOUN
+        res.append(lemmatize_word(word, pos=wordnet_pos))
+    return res
+
+
+def stem_lemmatize_sentence(sentence):
+    return [stem_word(word) for word in lemmatize_sentence(sentence)]
+
+
+TRANSLATE_MAP = maketrans(KERAS_TOKENIZER_FILTERS, KERAS_SPLIT * len(KERAS_TOKENIZER_FILTERS))
+
+
+def get_tokenizer():
+    if USE_LEMMATIZER and USE_STEMMER:
+        return stem_lemmatize_sentence
+    elif USE_LEMMATIZER:
+        return lemmatize_sentence
+    elif USE_STEMMER:
+        return stem_sentence
