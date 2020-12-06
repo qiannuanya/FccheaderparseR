@@ -494,3 +494,19 @@ def get_tokenizer():
         return lemmatize_sentence
     elif USE_STEMMER:
         return stem_sentence
+    else:
+        return get_valid_words
+
+
+tokenizer = get_tokenizer()
+
+
+#
+# https://stackoverflow.com/questions/21883108/fast-optimize-n-gram-implementations-in-python
+# @lru_cache(LRU_MAXSIZE)
+# 40.1 µs ± 918 ns per loop (mean ± std. dev. of 7 runs, 10000 loops each)
+def get_ngrams0(words, ngram_value):
+    # # return list
+    ngrams = [" ".join(ngram) for ngram in zip(*[words[i:] for i in range(ngram_value)])]
+    # return generator (10x faster)
+    # ngrams = (" ".join(ngram) for ngram in zip(*[words[i:] for i in range(ngram_value)]))
