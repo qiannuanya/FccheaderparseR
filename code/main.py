@@ -510,3 +510,18 @@ def get_ngrams0(words, ngram_value):
     ngrams = [" ".join(ngram) for ngram in zip(*[words[i:] for i in range(ngram_value)])]
     # return generator (10x faster)
     # ngrams = (" ".join(ngram) for ngram in zip(*[words[i:] for i in range(ngram_value)]))
+    return ngrams
+
+
+# 36.2 µs ± 1.04 µs per loop (mean ± std. dev. of 7 runs, 10000 loops each)
+def get_ngrams(words, ngram_value):
+    tokens = []
+    tokens_append = tokens.append
+    for i in range(ngram_value):
+        tokens_append(words[i:])
+    ngrams = []
+    ngrams_append = ngrams.append
+    space_join = " ".join
+    for ngram in zip(*tokens):
+        ngrams_append(space_join(ngram))
+    return ngrams
