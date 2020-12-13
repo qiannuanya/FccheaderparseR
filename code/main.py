@@ -525,3 +525,20 @@ def get_ngrams(words, ngram_value):
     for ngram in zip(*tokens):
         ngrams_append(space_join(ngram))
     return ngrams
+
+
+def get_bigrams(words):
+    return get_ngrams(words, 2)
+
+
+def get_trigrams(words):
+    return get_ngrams(words, 3)
+
+
+@lru_cache(LRU_MAXSIZE)
+# 68.8 µs ± 1.86 µs per loop (mean ± std. dev. of 7 runs, 10000 loops each)
+def get_ngrams_range(text, ngram_range):
+    unigrams = text.split(" ")
+    ngrams = []
+    ngrams_extend = ngrams.extend
+    for i in range(ngram_range[0], ngram_range[1] + 1):
