@@ -578,3 +578,19 @@ def clean_text(text):
         #     continue
         if t in stopwords:
             continue
+        t = stem(t)
+        tokens.append(t)
+
+    text = ' '.join(tokens)
+
+    text = whitespace.sub(' ', text)
+    text = text.strip()
+    return text.split(" ")
+
+
+@lru_cache(LRU_MAXSIZE)
+def tokenize(text):
+    if USE_NLTK_TOKENIZER:
+        # words = get_valid_words(word_tokenize(text))
+        # words = get_valid_words(wordpunct_tokenize(text))
+        words = get_valid_words(TOKTOKTOKENIZER.tokenize(text))
