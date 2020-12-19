@@ -542,3 +542,25 @@ def get_ngrams_range(text, ngram_range):
     ngrams = []
     ngrams_extend = ngrams.extend
     for i in range(ngram_range[0], ngram_range[1] + 1):
+        ngrams_extend(get_ngrams(unigrams, i))
+    return ngrams
+
+
+# 69.6 µs ± 1.45 µs per loop (mean ± std. dev. of 7 runs, 10000 loops each)
+def get_ngrams_range0(text, ngram_range):
+    unigrams = text.split(" ")
+    res = []
+    for i in ngram_range:
+        res += get_ngrams(unigrams, i)
+    res += unigrams
+    return res
+
+
+@lru_cache(LRU_MAXSIZE)
+def stem(s):
+    return STEMMER.stem(s)
+
+
+tags = re.compile(r'<.+?>')
+whitespace = re.compile(r'\s+')
+non_letter = re.compile(r'\W+')
