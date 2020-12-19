@@ -564,3 +564,17 @@ def stem(s):
 tags = re.compile(r'<.+?>')
 whitespace = re.compile(r'\s+')
 non_letter = re.compile(r'\W+')
+
+
+@lru_cache(LRU_MAXSIZE)
+def clean_text(text):
+    # text = text.lower()
+    text = non_letter.sub(' ', text)
+
+    tokens = []
+
+    for t in text.split():
+        # if len(t) <= 2 and not t.isdigit():
+        #     continue
+        if t in stopwords:
+            continue
