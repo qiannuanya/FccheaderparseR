@@ -618,3 +618,23 @@ class BaseReplacer:
     def __init__(self, pattern_replace_pair_list=[]):
         self.pattern_replace_pair_list = pattern_replace_pair_list
 
+
+## deal with word replacement
+# 1st solution in CrowdFlower
+class WordReplacer(BaseReplacer):
+    def __init__(self, replace_dict):
+        self.replace_dict = replace_dict
+        self.pattern_replace_pair_list = []
+        for k, v in self.replace_dict.items():
+            # pattern = r"(?<=\W|^)%s(?=\W|$)" % k
+            pattern = k
+            replace = v
+            self.pattern_replace_pair_list.append((pattern, replace))
+
+
+class MerCariCleaner(BaseReplacer):
+    """https://stackoverflow.com/questions/7317043/regex-not-operator
+    """
+
+    def __init__(self):
+        self.pattern_replace_pair_list = [
