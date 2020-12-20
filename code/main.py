@@ -594,3 +594,17 @@ def tokenize(text):
         # words = get_valid_words(word_tokenize(text))
         # words = get_valid_words(wordpunct_tokenize(text))
         words = get_valid_words(TOKTOKTOKENIZER.tokenize(text))
+    elif USE_SPACY_TOKENIZER:
+        words = get_valid_words(SPACYTOKENIZER.tokenize(text))
+    elif USE_KAGGLE_TOKENIZER:
+        words = clean_text(text)
+    else:
+        words = tokenizer(text.translate(TRANSLATE_MAP).split(KERAS_SPLIT))
+    return words
+
+
+@lru_cache(LRU_MAXSIZE)
+def tokenize_with_subword(text, n1=4, n2=5):
+    words = tokenize(text)
+    subwords = get_subword_for_list(words, n1, n2)
+    return words + subwords
