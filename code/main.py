@@ -608,3 +608,13 @@ def tokenize_with_subword(text, n1=4, n2=5):
     words = tokenize(text)
     subwords = get_subword_for_list(words, n1, n2)
     return words + subwords
+
+
+######################################################################
+# --------------------------- Processor ---------------------------
+## base class
+## Most of the processings can be casted into the "pattern-replace" framework
+class BaseReplacer:
+    def __init__(self, pattern_replace_pair_list=[]):
+        self.pattern_replace_pair_list = pattern_replace_pair_list
+
