@@ -638,3 +638,18 @@ class MerCariCleaner(BaseReplacer):
 
     def __init__(self):
         self.pattern_replace_pair_list = [
+            # # remove filters
+            # (r'[-!\'\"#&()\*\+,-/:;<=＝>?@\[\\\]^_`{|}~\t\n]+', r""),
+            # remove punctuation ".", e.g.,
+            (r"(?<!\d)\.(?!\d+)", r" "),
+            # iphone 6/6s -> iphone 6 / 6s
+            # iphone 6:6s -> iphone 6 : 6s
+            (r"(\W+)", r" \1 "),
+            # # non
+            # (r"[^A-Za-z0-9]+", r" "),
+            # 6s -> 6 s
+            # 32gb -> 32 gb
+            # 4oz -> 4 oz
+            # 4pcs -> 4 pcs
+            (r"(\d+)([a-zA-Z])", r"\1 \2"),
+            # iphone5 -> iphone 5
