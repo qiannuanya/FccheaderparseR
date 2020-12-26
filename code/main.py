@@ -653,3 +653,19 @@ class MerCariCleaner(BaseReplacer):
             # 4pcs -> 4 pcs
             (r"(\d+)([a-zA-Z])", r"\1 \2"),
             # iphone5 -> iphone 5
+            # xbox360 -> xbox 360
+            # only split those with chars length > 3
+            (r"([a-zA-Z]{3,})(\d+)", r"\1 \2"),
+        ]
+
+
+###########################################
+def df_lower(df):
+    return df.str.lower()
+
+
+def df_contains(df, pat):
+    return df.str.contains(pat).astype(int)
+
+
+def df_len(df):
