@@ -681,3 +681,16 @@ def df_in(df, col1, col2):
         return x[col1] in x[col2]
 
     return df.apply(_in, 1).astype(int)
+
+
+def df_brand_in_name(df):
+    return df_in(df, "brand_name", "name")
+
+
+def df_category1_in_name(df):
+    return df_in(df, "category_name1", "name")
+
+
+def df_category2_in_name(df):
+    return df_in(df, "category_name2", "name")
+
