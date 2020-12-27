@@ -669,3 +669,15 @@ def df_contains(df, pat):
 
 
 def df_len(df):
+    return df.str.len().astype(float)
+
+
+def df_num_tokens(df):
+    return df.str.split().apply(len).astype(float)
+
+
+def df_in(df, col1, col2):
+    def _in(x):
+        return x[col1] in x[col2]
+
+    return df.apply(_in, 1).astype(int)
