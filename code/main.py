@@ -694,3 +694,22 @@ def df_category1_in_name(df):
 def df_category2_in_name(df):
     return df_in(df, "category_name2", "name")
 
+
+def df_category3_in_name(df):
+    return df_in(df, "category_name3", "name")
+
+
+def df_brand_in_desc(df):
+    return df_in(df, "brand_name", "item_desc")
+
+
+def df_category1_in_desc(df):
+    return df_in(df, "category_name1", "item_desc")
+
+
+def df_category2_in_desc(df):
+    return df_in(df, "category_name2", "item_desc")
+
+
+def df_category3_in_desc(df):
+    return df_in(df, "category_name3", "item_desc")
