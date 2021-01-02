@@ -753,3 +753,22 @@ def parallelize_df_func(df, func, num_partitions=NUM_PARTITIONS, n_jobs=N_JOBS):
 
 
 ######################################################################
+
+def load_train_data():
+    types_dict_train = {
+        'train_id': 'int32',
+        'item_condition_id': 'int32',
+        'price': 'float32',
+        'shipping': 'int8',
+        'name': 'str',
+        'brand_name': 'str',
+        'item_desc': 'str',
+        'category_name': 'str',
+    }
+    df = pd.read_csv('../input/train.tsv', delimiter='\t', low_memory=True, dtype=types_dict_train)
+    df.rename(columns={"train_id": "id"}, inplace=True)
+    df.rename(columns={"item_description": "item_desc"}, inplace=True)
+    if DROP_ZERO_PRICE:
+        df = df[df.price > 0].copy()
+    price = np.log1p(df.price.values)
+    df.drop("price", axis=1, inplace=True)
