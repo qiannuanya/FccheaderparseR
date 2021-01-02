@@ -713,3 +713,23 @@ def df_category2_in_desc(df):
 
 def df_category3_in_desc(df):
     return df_in(df, "category_name3", "item_desc")
+
+
+def df_clean(df):
+    for pat, repl in MerCariCleaner().pattern_replace_pair_list:
+        df = df.str.replace(pat, repl)
+    # for pat, repl in WordReplacer(WORDREPLACER_DICT).pattern_replace_pair_list:
+    #     df = df.str.replace(pat, repl)
+    return df
+
+
+def df_tokenize(df):
+    return df.apply(tokenize)
+
+
+def df_tokenize_with_subword(df):
+    return df.apply(tokenize_with_subword)
+
+
+def df_get_bigram(df):
+    return df.apply(get_bigrams)
