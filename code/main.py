@@ -733,3 +733,23 @@ def df_tokenize_with_subword(df):
 
 def df_get_bigram(df):
     return df.apply(get_bigrams)
+
+
+def df_get_trigram(df):
+    return df.apply(get_trigrams)
+
+
+def df_get_subword(df):
+    return df.apply(get_subword_for_list)
+
+
+def parallelize_df_func(df, func, num_partitions=NUM_PARTITIONS, n_jobs=N_JOBS):
+    df_split = np.array_split(df, num_partitions)
+    pool = Pool(n_jobs)
+    df = pd.concat(pool.map(func, df_split))
+    pool.close()
+    pool.join()
+    return df
+
+
+######################################################################
