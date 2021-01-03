@@ -772,3 +772,14 @@ def load_train_data():
         df = df[df.price > 0].copy()
     price = np.log1p(df.price.values)
     df.drop("price", axis=1, inplace=True)
+    df["price"] = price
+    df["is_train"] = 1
+    df["missing_brand_name"] = df["brand_name"].isnull().astype(int)
+    df["missing_category_name"] = df["category_name"].isnull().astype(int)
+    missing_ind = np.logical_or(df["item_desc"].isnull(),
+                                df["item_desc"].str.lower().str.contains("no\s+description\s+yet"))
+    df["missing_item_desc"] = missing_ind.astype(int)
+    df["item_desc"][missing_ind] = df["name"][missing_ind]
+    gc.collect()
+    if DEBUG:
+        return df.head(DEBUG_SAMPLE_NUM)
