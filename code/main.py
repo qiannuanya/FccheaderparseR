@@ -783,3 +783,21 @@ def load_train_data():
     gc.collect()
     if DEBUG:
         return df.head(DEBUG_SAMPLE_NUM)
+    else:
+        return df
+
+
+def load_test_data(chunksize=350000*2):
+    types_dict_test = {
+        'test_id': 'int32',
+        'item_condition_id': 'int32',
+        'shipping': 'int8',
+        'name': 'str',
+        'brand_name': 'str',
+        'item_description': 'str',
+        'category_name': 'str',
+    }
+    chunks = pd.read_csv('../input/test.tsv', delimiter='\t',
+                         low_memory=True, dtype=types_dict_test,
+                         chunksize=chunksize)
+    for df in chunks:
