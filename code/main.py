@@ -801,3 +801,22 @@ def load_test_data(chunksize=350000*2):
                          low_memory=True, dtype=types_dict_test,
                          chunksize=chunksize)
     for df in chunks:
+        df.rename(columns={"test_id": "id"}, inplace=True)
+        df.rename(columns={"item_description": "item_desc"}, inplace=True)
+        df["missing_brand_name"] = df["brand_name"].isnull().astype(int)
+        df["missing_category_name"] = df["category_name"].isnull().astype(int)
+        missing_ind = np.logical_or(df["item_desc"].isnull(),
+                                    df["item_desc"].str.lower().str.contains("no\s+description\s+yet"))
+        df["missing_item_desc"] = missing_ind.astype(int)
+        df["item_desc"][missing_ind] = df["name"][missing_ind]
+        yield df
+
+
+@lru_cache(1024)
+def split_category_name(row):
+    grps = row.split("/")
+    if len(grps) > MAX_CATEGORY_NAME_LEN:
+        grps = grps[:MAX_CATEGORY_NAME_LEN]
+    else:
+        grps += [MISSING_VALUE_STRING.lower()] * (MAX_CATEGORY_NAME_LEN - len(grps))
+    return tuple(grps)
