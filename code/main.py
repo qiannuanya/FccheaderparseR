@@ -845,3 +845,28 @@ def get_word_index0(words, max_num, prefix):
     word_counts = defaultdict(int)
     for ws in words:
         for w in ws:
+            word_counts[w] += 1
+    wcounts = list(word_counts.items())
+    wcounts.sort(key=lambda x: x[1], reverse=True)
+    sorted_voc = [wc[0] for wc in wcounts[:(max_num - 1)]]
+    word_index = dict(zip(sorted_voc, range(2, max_num)))
+    return word_index
+
+
+def get_word_index1(words, max_num, prefix):
+    word_counts = Counter([w for ws in words for w in ws])
+    # """
+    wcounts = list(word_counts.items())
+    wcounts.sort(key=lambda x: x[1], reverse=True)
+    sorted_voc = [wc[0] for wc in wcounts]
+    del wcounts
+    gc.collect()
+    # only keep MAX_NUM_WORDS
+    sorted_voc = sorted_voc[:(max_num - 1)]
+    # note that index 0 is reserved, never assigned to an existing word
+    word_index = dict(zip(sorted_voc, range(2, max_num)))
+    return word_index
+
+
+def get_word_index(words, max_num, prefix):
+    word_counts = Counter([w for ws in words for w in ws])
