@@ -820,3 +820,28 @@ def split_category_name(row):
     else:
         grps += [MISSING_VALUE_STRING.lower()] * (MAX_CATEGORY_NAME_LEN - len(grps))
     return tuple(grps)
+
+
+"""
+https://stackoverflow.com/questions/3172173/most-efficient-way-to-calculate-frequency-of-values-in-a-python-list
+
+| approach       | american-english, |      big.txt, | time w.r.t. defaultdict |
+|                |     time, seconds | time, seconds |                         |
+|----------------+-------------------+---------------+-------------------------|
+| Counter        |             0.451 |         3.367 |                     3.6 |
+| setdefault     |             0.348 |         2.320 |                     2.5 |
+| list           |             0.277 |         1.822 |                       2 |
+| try/except     |             0.158 |         1.068 |                     1.2 |
+| defaultdict    |             0.141 |         0.925 |                       1 |
+| numpy          |             0.012 |         0.076 |                   0.082 |
+| S.Mark's ext.  |             0.003 |         0.019 |                   0.021 |
+| ext. in Cython |             0.001 |         0.008 |                  0.0086 |
+
+code: https://gist.github.com/347000
+"""
+
+
+def get_word_index0(words, max_num, prefix):
+    word_counts = defaultdict(int)
+    for ws in words:
+        for w in ws:
