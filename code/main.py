@@ -870,3 +870,19 @@ def get_word_index1(words, max_num, prefix):
 
 def get_word_index(words, max_num, prefix):
     word_counts = Counter([w for ws in words for w in ws])
+    sorted_voc = [w for w, c in word_counts.most_common(max_num - 1)]
+    word_index = dict(zip(sorted_voc, range(2, max_num)))
+    return word_index
+
+
+def get_word_index(words, max_num, prefix):
+    sorted_voc = top_k_selector.topKFrequent(words, max_num - 1)
+    word_index = dict(zip(sorted_voc, range(2, max_num)))
+    return word_index
+
+
+class MyLabelEncoder(object):
+    """safely handle unknown label"""
+
+    def __init__(self):
+        self.mapper = {}
