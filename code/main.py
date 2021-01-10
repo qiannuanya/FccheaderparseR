@@ -886,3 +886,25 @@ class MyLabelEncoder(object):
 
     def __init__(self):
         self.mapper = {}
+
+    def fit(self, X):
+        uniq_X = np.unique(X)
+        # reserve 0 for unknown
+        self.mapper = dict(zip(uniq_X, range(1, len(uniq_X) + 1)))
+        return self
+
+    def fit_transform(self, X):
+        self.fit(X)
+        return self.transform(X)
+
+    def _map(self, x):
+        return self.mapper.get(x, 0)
+
+    def transform(self, X):
+        return list(map(self._map, X))
+
+
+class MyStandardScaler(object):
+    def __init__(self, identity=False, epsilon=1e-8):
+        self.identity = identity
+        self.mean_ = 0.
