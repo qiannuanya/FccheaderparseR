@@ -908,3 +908,16 @@ class MyStandardScaler(object):
     def __init__(self, identity=False, epsilon=1e-8):
         self.identity = identity
         self.mean_ = 0.
+        self.scale_ = 1.
+        self.epsilon = epsilon
+
+    def fit(self, X):
+        if not self.identity:
+            self.mean_ = np.mean(X, axis=0)
+            self.scale_ = np.std(X, axis=0)
+        else:
+            self.epsilon = 0.
+
+    def fit_transform(self, X):
+        self.fit(X)
+        return self.transform(X)
