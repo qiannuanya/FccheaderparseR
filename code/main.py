@@ -921,3 +921,15 @@ class MyStandardScaler(object):
     def fit_transform(self, X):
         self.fit(X)
         return self.transform(X)
+
+    def transform(self, X):
+        return (X - self.mean_) / (self.scale_ + self.epsilon)
+
+    def inverse_transform(self, X):
+        return X * (self.scale_ + self.epsilon) + self.mean_
+
+
+def preprocess(df, word_index=None, bigram_index=None,
+               trigram_index=None, subword_index=None,
+               label_encoder=None):
+    start_time = time.time()
