@@ -969,3 +969,15 @@ def preprocess(df, word_index=None, bigram_index=None,
     print("[%.5f] Done df_tokenize" % (time.time() - start_time))
     df.drop(["name"], axis=1, inplace=True)
     df.drop(["item_desc"], axis=1, inplace=True)
+    gc.collect()
+    if USE_MULTITHREAD:
+        if EXTRACTED_BIGRAM:
+            df["seq_bigram_item_desc"] = parallelize_df_func(df["seq_item_desc"], df_get_bigram)
+            print("[%.5f] Done df_get_bigram" % (time.time() - start_time))
+        if EXTRACTED_TRIGRAM:
+            df["seq_trigram_item_desc"] = parallelize_df_func(df["seq_item_desc"], df_get_trigram)
+            print("[%.5f] Done df_get_trigram" % (time.time() - start_time))
+        if EXTRACTED_SUBWORD:
+            df["seq_subword_item_desc"] = parallelize_df_func(df["seq_item_desc"], df_get_subword)
+            print("[%.5f] Done df_get_subword" % (time.time() - start_time))
+    else:
