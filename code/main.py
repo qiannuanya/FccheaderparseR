@@ -947,3 +947,25 @@ def preprocess(df, word_index=None, bigram_index=None,
     print("[%.5f] Done df_lower" % (time.time() - start_time))
 
     #### split category name
+    for i, cat in enumerate(zip(*df.category_name.apply(split_category_name))):
+        df["category_name%d" % (i + 1)] = cat
+        gc.collect()
+
+    #### regex based cleaning
+    if USE_CLEAN:
+        df["name"] = parallelize_df_func(df["name"], df_clean)
+        df["item_desc"] = parallelize_df_func(df["item_desc"], df_clean)
+        # df["category_name"] = parallelize_df_func(df["category_name"], df_clean)
+        print("[%.5f] Done df_clean" % (time.time() - start_time))
+        gc.collect()
+
+    #### tokenize
+    # print("   Fitting tokenizer...")
+    df["seq_name"] = parallelize_df_func(df["name"], df_tokenize)
+    df["seq_item_desc"] = parallelize_df_func(df["item_desc"], df_tokenize)
+    # df["seq_brand_name"] = parallelize_df_func(df["brand_name"], df_tokenize)
+    # df["seq_category_name"] = parallelize_df_func(df["category_name"], df_tokenize)
+    gc.collect()
+    print("[%.5f] Done df_tokenize" % (time.time() - start_time))
+    df.drop(["name"], axis=1, inplace=True)
+    df.drop(["item_desc"], axis=1, inplace=True)
