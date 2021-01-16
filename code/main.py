@@ -933,3 +933,17 @@ def preprocess(df, word_index=None, bigram_index=None,
                trigram_index=None, subword_index=None,
                label_encoder=None):
     start_time = time.time()
+
+    #### fill na
+    df.fillna(MISSING_VALUE_STRING, inplace=True)
+    gc.collect()
+
+    #### to lower case
+    df["name"] = df.name.str.lower()
+    df["brand_name"] = df.brand_name.str.lower()
+    df["category_name"] = df.category_name.str.lower()
+    df["item_desc"] = df.item_desc.str.lower()
+    gc.collect()
+    print("[%.5f] Done df_lower" % (time.time() - start_time))
+
+    #### split category name
