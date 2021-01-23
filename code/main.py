@@ -1023,3 +1023,24 @@ def preprocess(df, word_index=None, bigram_index=None,
         # v = range(10000)
         # k = [str(i) for i in v]
         # vocab = dict(zip(k, v))
+        # %timeit word2ind(word_lst, vocab)
+        # 4.06 µs ± 63.8 ns per loop (mean ± std. dev. of 7 runs, 100000 loops each)
+        def word2ind0(word_lst, vocab):
+            vect = []
+            for w in word_lst:
+                if w in vocab:
+                    vect.append(vocab[w])
+            return vect
+
+        # 4.46 µs ± 77.9 ns per loop (mean ± std. dev. of 7 runs, 100000 loops each)
+        def word2ind1(word_lst, vocab):
+            vect = [vocab[w] for w in word_lst if w in vocab]
+            return vect
+
+        # 13.3 µs ± 99.7 ns per loop (mean ± std. dev. of 7 runs, 100000 loops each)
+        def word2ind2(word_lst, vocab):
+            vect = []
+            for w in word_lst:
+                i = vocab.get(w)
+                if i is not None:
+                    vect.append(i)
