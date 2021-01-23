@@ -1044,3 +1044,17 @@ def preprocess(df, word_index=None, bigram_index=None,
                 i = vocab.get(w)
                 if i is not None:
                     vect.append(i)
+            return vect
+
+        # 14.6 µs ± 114 ns per loop (mean ± std. dev. of 7 runs, 100000 loops each)
+        def word2ind3(word_lst, vocab):
+            return [vocab.get(w, 1) for w in word_lst]
+
+        word2ind = word2ind0
+
+        def wordlist2ind0(word_list_lst, vocab):
+            if len(word_list_lst) == 0:
+                vect = [[]]
+            else:
+                vect = []
+                for word_list in word_list_lst:
