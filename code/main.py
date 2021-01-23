@@ -981,3 +981,24 @@ def preprocess(df, word_index=None, bigram_index=None,
             df["seq_subword_item_desc"] = parallelize_df_func(df["seq_item_desc"], df_get_subword)
             print("[%.5f] Done df_get_subword" % (time.time() - start_time))
     else:
+        if EXTRACTED_BIGRAM:
+            df["seq_bigram_item_desc"] = df_get_bigram(df["seq_item_desc"])
+            print("[%.5f] Done df_get_bigram" % (time.time() - start_time))
+        if EXTRACTED_TRIGRAM:
+            df["seq_trigram_item_desc"] = df_get_trigram(df["seq_item_desc"])
+            print("[%.5f] Done df_get_trigram" % (time.time() - start_time))
+        if EXTRACTED_SUBWORD:
+            df["seq_subword_item_desc"] = df_get_subword(df["seq_item_desc"])
+            print("[%.5f] Done df_get_subword" % (time.time() - start_time))
+    if not VOCAB_HASHING_TRICK:
+        if word_index is None:
+            ##### word_index
+            words = df.seq_name.tolist() + \
+                    df.seq_item_desc.tolist()
+                    # df.seq_category_name.tolist()
+            word_index = get_word_index(words, MAX_NUM_WORDS, "word")
+            del words
+            gc.collect()
+        if EXTRACTED_BIGRAM:
+            if bigram_index is None:
+                bigrams = df.seq_bigram_item_desc.tolist()
