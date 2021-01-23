@@ -1002,3 +1002,24 @@ def preprocess(df, word_index=None, bigram_index=None,
         if EXTRACTED_BIGRAM:
             if bigram_index is None:
                 bigrams = df.seq_bigram_item_desc.tolist()
+                bigram_index = get_word_index(bigrams, MAX_NUM_BIGRAMS, "bigram")
+                del bigrams
+                gc.collect()
+        if EXTRACTED_TRIGRAM:
+            if trigram_index is None:
+                trigrams = df.seq_trigram_item_desc.tolist()
+                trigram_index = get_word_index(trigrams, MAX_NUM_TRIGRAMS, "trigram")
+                del trigrams
+                gc.collect()
+        if EXTRACTED_SUBWORD:
+            if subword_index is None:
+                subwords = df.seq_subword_item_desc.tolist()
+                subword_index = get_word_index(subwords, MAX_NUM_SUBWORDS, "subword")
+                del subwords
+                gc.collect()
+        print("[%.5f] Done building vocab" % (time.time() - start_time))
+
+        # faster
+        # v = range(10000)
+        # k = [str(i) for i in v]
+        # vocab = dict(zip(k, v))
