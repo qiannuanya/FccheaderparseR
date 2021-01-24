@@ -1080,3 +1080,20 @@ def preprocess(df, word_index=None, bigram_index=None,
             return df.apply(bigram_lst_to_sequences)
 
         def trigram_lst_to_sequences(word_lst):
+            return word2ind(word_lst, trigram_index)
+
+        def df_trigram_lst_to_sequences(df):
+            return df.apply(trigram_lst_to_sequences)
+
+        def subword_lst_to_sequences(word_lst):
+            return word2ind(word_lst, subword_index)
+
+        def df_subword_lst_to_sequences(df):
+            return df.apply(subword_lst_to_sequences)
+
+        # print("   Transforming text to seq...")
+        if USE_MULTITHREAD:
+            df["seq_name"] = parallelize_df_func(df["seq_name"], df_word_lst_to_sequences)
+            df["seq_item_desc"] = parallelize_df_func(df["seq_item_desc"], df_word_lst_to_sequences)
+            # df["seq_category_name"] = parallelize_df_func(df["seq_category_name"], df_word_lst_to_sequences)
+            print("[%.5f] Done df_word_lst_to_sequences" % (time.time() - start_time))
