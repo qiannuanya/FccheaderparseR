@@ -1058,3 +1058,25 @@ def preprocess(df, word_index=None, bigram_index=None,
             else:
                 vect = []
                 for word_list in word_list_lst:
+                    vect_ = []
+                    for w in word_list:
+                        if w in vocab:
+                            vect_.append(vocab[w])
+                    vect.append(vect_)
+            return vect
+
+        wordlist2ind = wordlist2ind0
+
+        def word_lst_to_sequences(word_lst):
+            return word2ind(word_lst, word_index)
+
+        def df_word_lst_to_sequences(df):
+            return df.apply(word_lst_to_sequences)
+
+        def bigram_lst_to_sequences(word_lst):
+            return word2ind(word_lst, bigram_index)
+
+        def df_bigram_lst_to_sequences(df):
+            return df.apply(bigram_lst_to_sequences)
+
+        def trigram_lst_to_sequences(word_lst):
