@@ -1119,3 +1119,12 @@ def preprocess(df, word_index=None, bigram_index=None,
                 print("[%.5f] Done df_bigram_lst_to_sequences" % (time.time() - start_time))
             if EXTRACTED_TRIGRAM:
                 df["seq_trigram_item_desc"] = df_trigram_lst_to_sequences(df["seq_trigram_item_desc"])
+                print("[%.5f] Done df_trigram_lst_to_sequences" % (time.time() - start_time))
+            if EXTRACTED_SUBWORD:
+                df["seq_subword_item_desc"] = df_subword_lst_to_sequences(df["seq_subword_item_desc"])
+                print("[%.5f] Done df_subword_lst_to_sequences" % (time.time() - start_time))
+
+    else:
+        def word_lst_to_sequences_hash(word_lst):
+            vect = [hashing_trick(w, MAX_NUM_WORDS) for w in word_lst]
+            return vect
