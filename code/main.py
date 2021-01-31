@@ -1195,3 +1195,22 @@ def preprocess(df, word_index=None, bigram_index=None,
         print('Average item_desc sequence length: {}'.format(df["seq_item_desc"].apply(len).mean()))
         # print('Average brand_name sequence length: {}'.format(df["seq_brand_name"].apply(len).mean()))
         # print('Average category_name sequence length: {}'.format(df["seq_category_name"].apply(len).mean()))
+        if EXTRACTED_SUBWORD:
+            print('Average item_desc subword sequence length: {}'.format(
+                df["seq_subword_item_desc"].apply(len).mean()))
+
+    #### convert categorical variables
+    if label_encoder is None:
+        label_encoder = {}
+        label_encoder["brand_name"] = MyLabelEncoder()
+        df["brand_name_cat"] = label_encoder["brand_name"].fit_transform(df["brand_name"])
+        label_encoder["category_name"] = MyLabelEncoder()
+        df["category_name_cat"] = label_encoder["category_name"].fit_transform(df["category_name"])
+        df.drop("brand_name", axis=1, inplace=True)
+        df.drop("category_name", axis=1, inplace=True)
+        gc.collect()
+        for i in range(MAX_CATEGORY_NAME_LEN):
+            label_encoder["category_name%d" % (i + 1)] = MyLabelEncoder()
+            df["category_name%d_cat" % (i + 1)] = label_encoder["category_name%d" % (i + 1)].fit_transform(
+                df["category_name%d" % (i + 1)])
+            df.drop("category_name%d" % (i + 1), axis=1, inplace=True)
