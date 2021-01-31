@@ -1144,3 +1144,19 @@ def preprocess(df, word_index=None, bigram_index=None,
             return vect
 
         def df_trigram_lst_to_sequences_hash(df):
+            return df.apply(trigram_lst_to_sequences_hash)
+
+        def subword_lst_to_sequences_hash(word_lst):
+            vect = [hashing_trick(w, MAX_NUM_SUBWORDS) for w in word_lst]
+            return vect
+
+        def df_subword_lst_to_sequences_hash(df):
+            return df.apply(subword_lst_to_sequences_hash)
+
+        # print("   Transforming text to seq...")
+        if USE_MULTITHREAD:
+            df["seq_name"] = parallelize_df_func(df["seq_name"], df_word_lst_to_sequences_hash)
+            df["seq_item_desc"] = parallelize_df_func(df["seq_item_desc"], df_word_lst_to_sequences_hash)
+            # df["seq_category_name"] = parallelize_df_func(df["seq_category_name"], df_word_lst_to_sequences_hash)
+            gc.collect()
+            print("[%.5f] Done df_word_lst_to_sequences_hash" % (time.time() - start_time))
