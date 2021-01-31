@@ -1174,3 +1174,24 @@ def preprocess(df, word_index=None, bigram_index=None,
                 print("[%.5f] Done df_subword_lst_to_sequences_hash" % (time.time() - start_time))
         else:
             df["seq_name"] = df_word_lst_to_sequences_hash(df["seq_name"])
+            df["seq_item_desc"] = df_word_lst_to_sequences_hash(df["seq_item_desc"])
+            # df["seq_category_name"] = df_word_lst_to_sequences_hash(df["seq_category_name"])
+            gc.collect()
+            print("[%.5f] Done df_word_lst_to_sequences_hash" % (time.time() - start_time))
+            if EXTRACTED_BIGRAM:
+                df["seq_bigram_item_desc"] = df_bigram_lst_to_sequences_hash(df["seq_bigram_item_desc"])
+                print("[%.5f] Done df_bigram_lst_to_sequences_hash" % (time.time() - start_time))
+            if EXTRACTED_TRIGRAM:
+                df["seq_trigram_item_desc"] = df_trigram_lst_to_sequences_hash(df["seq_trigram_item_desc"])
+                print("[%.5f] Done df_trigram_lst_to_sequences_hash" % (time.time() - start_time))
+            if EXTRACTED_SUBWORD:
+                df["seq_subword_item_desc"] = df_subword_lst_to_sequences_hash(df["seq_subword_item_desc"])
+                print("[%.5f] Done df_subword_lst_to_sequences_hash" % (time.time() - start_time))
+
+    print("[%.5f] Done tokenize data" % (time.time() - start_time))
+
+    if RUNNING_MODE != "submission":
+        print('Average name sequence length: {}'.format(df["seq_name"].apply(len).mean()))
+        print('Average item_desc sequence length: {}'.format(df["seq_item_desc"].apply(len).mean()))
+        # print('Average brand_name sequence length: {}'.format(df["seq_brand_name"].apply(len).mean()))
+        # print('Average category_name sequence length: {}'.format(df["seq_category_name"].apply(len).mean()))
