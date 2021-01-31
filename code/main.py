@@ -1160,3 +1160,17 @@ def preprocess(df, word_index=None, bigram_index=None,
             # df["seq_category_name"] = parallelize_df_func(df["seq_category_name"], df_word_lst_to_sequences_hash)
             gc.collect()
             print("[%.5f] Done df_word_lst_to_sequences_hash" % (time.time() - start_time))
+            if EXTRACTED_BIGRAM:
+                df["seq_bigram_item_desc"] = parallelize_df_func(df["seq_bigram_item_desc"],
+                                                                 df_bigram_lst_to_sequences_hash)
+                print("[%.5f] Done df_bigram_lst_to_sequences_hash" % (time.time() - start_time))
+            if EXTRACTED_TRIGRAM:
+                df["seq_trigram_item_desc"] = parallelize_df_func(df["seq_trigram_item_desc"],
+                                                                  df_trigram_lst_to_sequences_hash)
+                print("[%.5f] Done df_trigram_lst_to_sequences_hash" % (time.time() - start_time))
+            if EXTRACTED_SUBWORD:
+                df["seq_subword_item_desc"] = parallelize_df_func(df["seq_subword_item_desc"],
+                                                                  df_subword_lst_to_sequences_hash)
+                print("[%.5f] Done df_subword_lst_to_sequences_hash" % (time.time() - start_time))
+        else:
+            df["seq_name"] = df_word_lst_to_sequences_hash(df["seq_name"])
