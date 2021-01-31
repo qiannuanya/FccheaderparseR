@@ -1128,3 +1128,19 @@ def preprocess(df, word_index=None, bigram_index=None,
         def word_lst_to_sequences_hash(word_lst):
             vect = [hashing_trick(w, MAX_NUM_WORDS) for w in word_lst]
             return vect
+
+        def df_word_lst_to_sequences_hash(df):
+            return df.apply(word_lst_to_sequences_hash)
+
+        def bigram_lst_to_sequences_hash(word_lst):
+            vect = [hashing_trick(w, MAX_NUM_BIGRAMS) for w in word_lst]
+            return vect
+
+        def df_bigram_lst_to_sequences_hash(df):
+            return df.apply(bigram_lst_to_sequences_hash)
+
+        def trigram_lst_to_sequences_hash(word_lst):
+            vect = [hashing_trick(w, MAX_NUM_TRIGRAMS) for w in word_lst]
+            return vect
+
+        def df_trigram_lst_to_sequences_hash(df):
