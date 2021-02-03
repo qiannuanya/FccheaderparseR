@@ -1214,3 +1214,27 @@ def preprocess(df, word_index=None, bigram_index=None,
             df["category_name%d_cat" % (i + 1)] = label_encoder["category_name%d" % (i + 1)].fit_transform(
                 df["category_name%d" % (i + 1)])
             df.drop("category_name%d" % (i + 1), axis=1, inplace=True)
+    else:
+        df["brand_name_cat"] = label_encoder["brand_name"].transform(df["brand_name"])
+        df["category_name_cat"] = label_encoder["category_name"].transform(df["category_name"])
+        df.drop("brand_name", axis=1, inplace=True)
+        df.drop("category_name", axis=1, inplace=True)
+        gc.collect()
+        for i in range(MAX_CATEGORY_NAME_LEN):
+            df["category_name%d_cat" % (i + 1)] = label_encoder["category_name%d" % (i + 1)].transform(
+                df["category_name%d" % (i + 1)])
+            df.drop("category_name%d" % (i + 1), axis=1, inplace=True)
+    print("[%.5f] Done Handling categorical variables" % (time.time() - start_time))
+
+
+    if DUMP_DATA and RUNNING_MODE != "submission":
+        try:
+            with open(pkl_file, "wb") as f:
+                pkl.dump(df, f)
+        except:
+            pass
+
+    return df, word_index, bigram_index, trigram_index, subword_index, label_encoder
+
+
+feat_cols = [
