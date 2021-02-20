@@ -1238,3 +1238,19 @@ def preprocess(df, word_index=None, bigram_index=None,
 
 
 feat_cols = [
+    "missing_brand_name", "missing_category_name", "missing_item_desc",
+]
+NUM_VARS_DIM = len(feat_cols)
+
+
+def get_xnn_data(dataset, lbs, params):
+    start_time = time.time()
+
+    if lbs is None:
+        lbs = []
+        lb = LabelBinarizer(sparse_output=True)
+        item_condition_array = lb.fit_transform(dataset.item_condition_id).toarray()
+        lbs.append(lb)
+
+    else:
+        lb = lbs[0]
