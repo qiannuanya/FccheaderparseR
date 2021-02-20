@@ -1254,3 +1254,16 @@ def get_xnn_data(dataset, lbs, params):
 
     else:
         lb = lbs[0]
+        item_condition_array = lb.transform(dataset.item_condition_id).toarray()
+
+
+    num_vars = dataset[feat_cols].values
+
+    X = {}
+
+    X['seq_name'] = pad_sequences(dataset.seq_name, maxlen=params["max_sequence_length_name"],
+                                        padding=params["pad_sequences_padding"],
+                                        truncating=params["pad_sequences_truncating"])
+    X["sequence_length_name"] = params["max_sequence_length_name"] * np.ones(dataset.shape[0])
+
+    X['seq_item_desc'] = pad_sequences(dataset.seq_item_desc, maxlen=params["max_sequence_length_item_desc"],
