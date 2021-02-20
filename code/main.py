@@ -1267,3 +1267,17 @@ def get_xnn_data(dataset, lbs, params):
     X["sequence_length_name"] = params["max_sequence_length_name"] * np.ones(dataset.shape[0])
 
     X['seq_item_desc'] = pad_sequences(dataset.seq_item_desc, maxlen=params["max_sequence_length_item_desc"],
+                                             padding=params["pad_sequences_padding"],
+                                             truncating=params["pad_sequences_truncating"])
+    X["sequence_length_item_desc"] = params["max_sequence_length_item_desc"] * np.ones(dataset.shape[0])
+
+    X['seq_bigram_item_desc'] = pad_sequences(dataset.seq_bigram_item_desc,
+                                                    maxlen=params["max_sequence_length_item_desc"],
+                                                    padding=params["pad_sequences_padding"],
+                                                    truncating=params["pad_sequences_truncating"]) if params[
+        "use_bigram"] else None
+
+    X['seq_trigram_item_desc'] = pad_sequences(dataset.seq_trigram_item_desc,
+                                                     maxlen=params["max_sequence_length_item_desc"],
+                                                     padding=params["pad_sequences_padding"],
+                                                     truncating=params["pad_sequences_truncating"]) if params[
