@@ -1331,3 +1331,14 @@ def get_training_params(train_size, batch_size, params):
         params["cnn_num_filters"] = params["embedding_dim"]
 
     # text dim after the encode step
+    if params["encode_method"] == "fasttext":
+        encode_text_dim = params["embedding_dim"]
+    elif params["encode_method"] == "textcnn":
+        encode_text_dim = params["cnn_num_filters"] * len(params["cnn_filter_sizes"])
+    elif params["encode_method"] in ["textrnn", "textbirnn"]:
+        encode_text_dim = params["rnn_num_units"]
+    elif params["encode_method"] == "fasttext+textcnn":
+        encode_text_dim = params["embedding_dim"] + params["cnn_num_filters"] * len(
+            params["cnn_filter_sizes"])
+    elif params["encode_method"] in ["fasttext+textrnn", "fasttext+textbirnn"]:
+        encode_text_dim = params["embedding_dim"] + params["rnn_num_units"]
