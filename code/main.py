@@ -1294,3 +1294,20 @@ def get_xnn_data(dataset, lbs, params):
         'brand_name': dataset.brand_name_cat.values.reshape((-1, 1)),
         # 'category_name': dataset.category_name_cat.values.reshape((-1, 1)),
         'category_name1': dataset.category_name1_cat.values.reshape((-1, 1)),
+        'category_name2': dataset.category_name2_cat.values.reshape((-1, 1)),
+        'category_name3': dataset.category_name3_cat.values.reshape((-1, 1)),
+        'item_condition_id': dataset.item_condition_id.values.reshape((-1, 1)),
+        'item_condition': item_condition_array,
+        'num_vars': num_vars,
+        'shipping': dataset.shipping.values.reshape((-1, 1)),
+
+    })
+
+    print("[%.5f] Done get_xnn_data." % (time.time() - start_time))
+    return X, lbs, params
+
+
+
+########################
+# MODEL TRAINING
+########################
