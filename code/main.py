@@ -1281,3 +1281,16 @@ def get_xnn_data(dataset, lbs, params):
                                                      maxlen=params["max_sequence_length_item_desc"],
                                                      padding=params["pad_sequences_padding"],
                                                      truncating=params["pad_sequences_truncating"]) if params[
+        "use_trigram"] else None
+
+    X['seq_subword_item_desc'] = pad_sequences(dataset.seq_subword_item_desc,
+                                                     maxlen=params["max_sequence_length_item_desc_subword"],
+                                                     padding=params["pad_sequences_padding"],
+                                                     truncating=params["pad_sequences_truncating"]) if params[
+        "use_subword"] else None
+    X["sequence_length_item_desc_subword"] = params["max_sequence_length_item_desc_subword"] * np.ones(dataset.shape[0])
+
+    X.update({
+        'brand_name': dataset.brand_name_cat.values.reshape((-1, 1)),
+        # 'category_name': dataset.category_name_cat.values.reshape((-1, 1)),
+        'category_name1': dataset.category_name1_cat.values.reshape((-1, 1)),
