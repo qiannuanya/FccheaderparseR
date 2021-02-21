@@ -1311,3 +1311,23 @@ def get_xnn_data(dataset, lbs, params):
 ########################
 # MODEL TRAINING
 ########################
+def get_training_params(train_size, batch_size, params):
+    params["num_update_each_epoch"] = int(train_size / float(batch_size))
+
+    # # cyclic lr
+    params["m_mul"] = np.power(params["lr_decay_each_epoch_cosine"], 1. / params["num_cycle_each_epoch"])
+    params["m_mul_exp"] = np.power(params["lr_decay_each_epoch_exp"], 1. / params["num_cycle_each_epoch"])
+    if params["t_mul"] == 1:
+        tmp = int(params["num_update_each_epoch"] / params["num_cycle_each_epoch"])
+    else:
+        tmp = int(params["num_update_each_epoch"] / params["snapshot_every_epoch"] * (1. - params["t_mul"]) / (
+                1. - np.power(params["t_mul"], params["num_cycle_each_epoch"] / params["snapshot_every_epoch"])))
+    params["first_decay_steps"] = max([tmp, 1])
+    params["snapshot_every_num_cycle"] = params["num_cycle_each_epoch"] // params["snapshot_every_epoch"]
+    params["snapshot_every_num_cycle"] = max(params["snapshot_every_num_cycle"], 1)
+
+    # cnn
+    if params["cnn_timedistributed"]:
+        params["cnn_num_filters"] = params["embedding_dim"]
+
+    # text dim after the encode step
