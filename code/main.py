@@ -1342,3 +1342,22 @@ def get_training_params(train_size, batch_size, params):
             params["cnn_filter_sizes"])
     elif params["encode_method"] in ["fasttext+textrnn", "fasttext+textbirnn"]:
         encode_text_dim = params["embedding_dim"] + params["rnn_num_units"]
+    elif params["encode_method"] in ["fasttext+textcnn+textrnn", "fasttext+textcnn+textbirnn"]:
+        encode_text_dim = params["embedding_dim"] + params["cnn_num_filters"] * len(
+            params["cnn_filter_sizes"]) + params["rnn_num_units"]
+    params["encode_text_dim"] = encode_text_dim
+
+    return params
+
+
+def cross_validation_hyperopt(dfTrain, params, target_scaler):
+    params = ModelParamSpace()._convert_int_param(params)
+    _print_param_dict(params)
+
+    # level1, valid index
+    level1Ratio, validRatio = 0.6, 0.4
+    num_train = dfTrain.shape[0]
+    level1Size = int(level1Ratio * num_train)
+    indices = np.arange(num_train)
+    np.random.seed(params["random_seed"])
+    np.random.shuffle(indices)
