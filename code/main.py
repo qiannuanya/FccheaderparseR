@@ -1361,3 +1361,21 @@ def cross_validation_hyperopt(dfTrain, params, target_scaler):
     indices = np.arange(num_train)
     np.random.seed(params["random_seed"])
     np.random.shuffle(indices)
+    level1Ind, validInd = indices[:level1Size], indices[level1Size:]
+    y_level1, y_valid = dfTrain.price.values[level1Ind].reshape((-1, 1)), dfTrain.price.values[validInd].reshape(
+        (-1, 1))
+    y_valid_inv = target_scaler.inverse_transform(y_valid)
+
+    X_level1, lbs, params = get_xnn_data(dfTrain.iloc[level1Ind], lbs=None, params=params)
+    X_valid, lbs, _ = get_xnn_data(dfTrain.iloc[validInd], lbs=lbs, params=params)
+
+    params = get_training_params(train_size=len(level1Ind), batch_size=params["batch_size_train"],
+                                 params=params)
+    model = XNN(params, target_scaler, logger)
+    model.fit(X_level1, y_level1, validation_data=(X_valid, y_valid))
+    y_valid_tf = model.predict(X_valid, mode="raw")
+    y_valid_tf_inv = target_scaler.inverse_transform(y_valid_tf)
+    for j in reversed(range(y_valid_tf.shape[1])):
+        rmsle = rmse(y_valid_inv, y_valid_tf_inv[:, j, np.newaxis])
+        logger.info("valid-rmsle (tf of last %d): %.5f" % (y_valid_tf.shape[1] - j, rmsle))
+        y_valid_tf_inv_ = np.mean(y_valid_tf_inv[:, j:], axis=1, keepdims=True)
