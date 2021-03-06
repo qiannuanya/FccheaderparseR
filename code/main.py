@@ -1379,3 +1379,20 @@ def cross_validation_hyperopt(dfTrain, params, target_scaler):
         rmsle = rmse(y_valid_inv, y_valid_tf_inv[:, j, np.newaxis])
         logger.info("valid-rmsle (tf of last %d): %.5f" % (y_valid_tf.shape[1] - j, rmsle))
         y_valid_tf_inv_ = np.mean(y_valid_tf_inv[:, j:], axis=1, keepdims=True)
+        rmsle = rmse(y_valid_inv, y_valid_tf_inv_)
+        logger.info(
+            "valid-rmsle (tf snapshot ensemble with mean of last %d): %.5f" % (y_valid_tf.shape[1] - j, rmsle))
+
+    stacking_model = LinearRegression(fit_intercept=True, normalize=False, copy_X=True, n_jobs=4)
+    stacking_model.fit(y_valid_tf, y_valid)
+    logger.info(stacking_model.intercept_)
+    logger.info(stacking_model.coef_)
+    y_valid_stack = stacking_model.predict(y_valid_tf).reshape((-1, 1))
+    y_valid_stack_inv = target_scaler.inverse_transform(y_valid_stack)
+    rmsle = rmse(y_valid_inv, y_valid_stack_inv)
+    logger.info("rmsle (stack): %.5f" % rmsle)
+
+    rmsle_mean = rmsle
+    rmsle_std = 0
+    logger.info("RMSLE")
+    logger.info("      Mean: %.6f" % rmsle_mean)
