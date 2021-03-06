@@ -1396,3 +1396,17 @@ def cross_validation_hyperopt(dfTrain, params, target_scaler):
     rmsle_std = 0
     logger.info("RMSLE")
     logger.info("      Mean: %.6f" % rmsle_mean)
+    logger.info("      Std: %.6f" % rmsle_std)
+    ret = {
+        "loss": rmsle_mean,
+        "attachments": {
+            "std": rmsle_std,
+        },
+        "status": STATUS_OK,
+    }
+    return ret
+
+
+def submission(params):
+    params = ModelParamSpace()._convert_int_param(params)
+    _print_param_dict(params)
