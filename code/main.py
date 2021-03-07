@@ -1420,3 +1420,14 @@ def submission(params):
 
     X_train, lbs_tf, params = get_xnn_data(dfTrain, lbs=None, params=params)
     y_train = dfTrain.price.values.reshape((-1, 1))
+
+    params["MAX_NUM_BRANDS"] = dfTrain["brand_name_cat"].max() + 1
+    params["MAX_NUM_CATEGORIES"] = dfTrain["category_name_cat"].max() + 1
+    params["MAX_NUM_CATEGORIES_LST"] = [0] * MAX_CATEGORY_NAME_LEN
+    for i in range(MAX_CATEGORY_NAME_LEN):
+        params["MAX_NUM_CATEGORIES_LST"][i] = dfTrain["category_name%d_cat" % (i + 1)].max() + 1
+    params["MAX_NUM_CONDITIONS"] = dfTrain["item_condition_id"].max()
+    params["MAX_NUM_SHIPPINGS"] = 2
+    params["NUM_VARS_DIM"] = NUM_VARS_DIM
+
+    del dfTrain
