@@ -1410,3 +1410,13 @@ def cross_validation_hyperopt(dfTrain, params, target_scaler):
 def submission(params):
     params = ModelParamSpace()._convert_int_param(params)
     _print_param_dict(params)
+    start_time = time.time()
+
+    dfTrain = load_train_data()
+    target_scaler = MyStandardScaler()
+    dfTrain["price"] = target_scaler.fit_transform(dfTrain["price"].values.reshape(-1, 1))
+    dfTrain, word_index, bigram_index, trigram_index, subword_index, label_encoder = preprocess(
+        dfTrain)
+
+    X_train, lbs_tf, params = get_xnn_data(dfTrain, lbs=None, params=params)
+    y_train = dfTrain.price.values.reshape((-1, 1))
