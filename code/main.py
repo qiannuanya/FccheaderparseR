@@ -1468,3 +1468,19 @@ def submission(params):
 def _print_param_dict(d, prefix="      ", incr_prefix="      "):
     for k, v in sorted(d.items()):
         if isinstance(v, dict):
+            logger.info("%s%s:" % (prefix, k))
+            _print_param_dict(v, prefix + incr_prefix, incr_prefix)
+        else:
+            logger.info("%s%s: %s" % (prefix, k, v))
+
+
+class ModelParamSpace:
+    def __init__(self):
+        pass
+
+    def _convert_int_param(self, param_dict):
+        if isinstance(param_dict, dict):
+            for k, v in param_dict.items():
+                if k in int_params:
+                    param_dict[k] = v if v is None else int(v)
+                elif isinstance(v, list) or isinstance(v, tuple):
