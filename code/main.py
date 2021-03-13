@@ -1451,3 +1451,20 @@ def submission(params):
         y_test_ = model.predict(X_test, mode="weight")
         y_test.append(y_test_)
         id_test.append(dfTest.id.values.reshape((-1, 1)))
+
+    y_test = np.vstack(y_test)
+    id_test = np.vstack(id_test)
+    y_test = np.expm1(target_scaler.inverse_transform(y_test))
+    y_test = y_test.flatten()
+    id_test = id_test.flatten()
+    id_test = id_test.astype(int)
+    y_test[y_test < 0.0] = 0.0
+    submission = pd.DataFrame({"test_id": id_test, "price": y_test})
+    submission.to_csv("sample_submission.csv", index=False)
+    print('[%.5f] Finished prediction' % (time.time() - start_time))
+
+
+# -------------------------------------- fasttext ---------------------------------------------
+def _print_param_dict(d, prefix="      ", incr_prefix="      "):
+    for k, v in sorted(d.items()):
+        if isinstance(v, dict):
