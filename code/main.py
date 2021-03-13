@@ -1431,3 +1431,23 @@ def submission(params):
     params["NUM_VARS_DIM"] = NUM_VARS_DIM
 
     del dfTrain
+    gc.collect()
+    print('[%.5f] Finished loading data' % (time.time() - start_time))
+
+    params = get_training_params(train_size=len(y_train), batch_size=params["batch_size_train"], params=params)
+    model = XNN(params, target_scaler, logger)
+    model.fit(X_train, y_train)
+    del X_train
+    del y_train
+    gc.collect()
+    print('[%.5f] Finished training tf' % (time.time() - start_time))
+
+    y_test = []
+    id_test = []
+    for dfTest in load_test_data(chunksize=350000*2):
+        dfTest, _, _, _, _, _ = preprocess(dfTest, word_index, bigram_index, trigram_index, subword_index, label_encoder)
+        X_test, lbs_tf, _ = get_xnn_data(dfTest, lbs=lbs_tf, params=params)
+
+        y_test_ = model.predict(X_test, mode="weight")
+        y_test.append(y_test_)
+        id_test.append(dfTest.id.values.reshape((-1, 1)))
