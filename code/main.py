@@ -1484,3 +1484,15 @@ class ModelParamSpace:
                 if k in int_params:
                     param_dict[k] = v if v is None else int(v)
                 elif isinstance(v, list) or isinstance(v, tuple):
+                    for i in range(len(v)):
+                        self._convert_int_param(v[i])
+                elif isinstance(v, dict):
+                    self._convert_int_param(v)
+        return param_dict
+
+
+if RUNNING_MODE == "validation":
+    load_data_success = False
+    pkl_file = "../input/dfTrain_bigram_[MAX_NUM_WORDS_%d]_[MAX_NUM_BIGRAMS_%d]_[VOCAB_HASHING_TRICK_%s].pkl" % (
+        MAX_NUM_WORDS, MAX_NUM_BIGRAMS, str(VOCAB_HASHING_TRICK))
+    if USE_PREPROCESSED_DATA:
