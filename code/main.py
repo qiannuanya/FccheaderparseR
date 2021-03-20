@@ -1496,3 +1496,16 @@ if RUNNING_MODE == "validation":
     pkl_file = "../input/dfTrain_bigram_[MAX_NUM_WORDS_%d]_[MAX_NUM_BIGRAMS_%d]_[VOCAB_HASHING_TRICK_%s].pkl" % (
         MAX_NUM_WORDS, MAX_NUM_BIGRAMS, str(VOCAB_HASHING_TRICK))
     if USE_PREPROCESSED_DATA:
+        try:
+            with open(pkl_file, "rb") as f:
+                dfTrain = pkl.load(f)
+            if DEBUG:
+                dfTrain = dfTrain.head(DEBUG_SAMPLE_NUM)
+            load_data_success = True
+        except:
+            pass
+    if not load_data_success:
+        dfTrain = load_train_data()
+        dfTrain, word_index, bigram_index, trigram_index, subword_index, label_encoder = preprocess(dfTrain)
+    target_scaler = MyStandardScaler()
+    dfTrain["price"] = target_scaler.fit_transform(dfTrain["price"].values.reshape(-1, 1))
