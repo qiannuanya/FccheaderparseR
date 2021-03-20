@@ -1509,3 +1509,22 @@ if RUNNING_MODE == "validation":
         dfTrain, word_index, bigram_index, trigram_index, subword_index, label_encoder = preprocess(dfTrain)
     target_scaler = MyStandardScaler()
     dfTrain["price"] = target_scaler.fit_transform(dfTrain["price"].values.reshape(-1, 1))
+
+    param_space_hyperopt["MAX_NUM_BRANDS"] = dfTrain["brand_name_cat"].max() + 1
+    param_space_hyperopt["MAX_NUM_CATEGORIES"] = dfTrain["category_name_cat"].max() + 1
+    param_space_hyperopt["MAX_NUM_CATEGORIES_LST"] = [0] * MAX_CATEGORY_NAME_LEN
+    for i in range(MAX_CATEGORY_NAME_LEN):
+        param_space_hyperopt["MAX_NUM_CATEGORIES_LST"][i] = dfTrain["category_name%d_cat" % (i + 1)].max() + 1
+    param_space_hyperopt["MAX_NUM_CONDITIONS"] = dfTrain["item_condition_id"].max()
+    param_space_hyperopt["MAX_NUM_SHIPPINGS"] = 2
+    param_space_hyperopt["NUM_VARS_DIM"] = NUM_VARS_DIM
+
+    start_time = time.time()
+    trials = Trials()
+    obj = lambda param: cross_validation_hyperopt(dfTrain, param, target_scaler)
+    best = fmin(obj, param_space_hyperopt, tpe.suggest, HYPEROPT_MAX_EVALS, trials)
+    best_params = space_eval(param_space_hyperopt, best)
+    best_params = ModelParamSpace()._convert_int_param(best_params)
+    trial_rmsles = np.asarray(trials.losses(), dtype=float)
+    best_ind = np.argmin(trial_rmsles)
+    best_rmse_mean = trial_rmsles[best_ind]
