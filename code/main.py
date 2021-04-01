@@ -1528,3 +1528,14 @@ if RUNNING_MODE == "validation":
     trial_rmsles = np.asarray(trials.losses(), dtype=float)
     best_ind = np.argmin(trial_rmsles)
     best_rmse_mean = trial_rmsles[best_ind]
+    best_rmse_std = trials.trial_attachments(trials.trials[best_ind])["std"]
+    logger.info("-" * 50)
+    logger.info("Best RMSLE")
+    logger.info("      Mean: %.6f" % best_rmse_mean)
+    logger.info("      Std: %.6f" % best_rmse_std)
+    logger.info("Best param")
+    _print_param_dict(best_params)
+    logger.info("time: %.5f" % (time.time() - start_time))
+
+else:
+    submission(param_space_best)
