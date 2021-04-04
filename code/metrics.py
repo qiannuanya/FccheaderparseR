@@ -1,3 +1,3 @@
 
 import numpy as np
-from skle
+from sklearn.metrics import mea
