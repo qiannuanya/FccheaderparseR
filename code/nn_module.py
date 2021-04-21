@@ -28,3 +28,24 @@ def embed(x, size, dim, seed=0, flatten=False, reduce_sum=False):
         out = tf.reduce_sum(out, axis=1)
     return out
 
+
+def embed_subword(x, size, dim, sequence_length, seed=0, mask_zero=False, maxlen=None):
+    # std = np.sqrt(2 / dim)
+    std = 0.001
+    minval = -std
+    maxval = std
+    emb = tf.Variable(tf.random_uniform([size, dim], minval, maxval, dtype=tf.float32, seed=seed))
+    # None * max_seq_len * max_word_len * embed_dim
+    out = tf.nn.embedding_lookup(emb, x)
+    if mask_zero:
+        # word_len: None * max_seq_len
+        # mask: shape=None * max_seq_len * max_word_len
+        mask = tf.sequence_mask(sequence_length, maxlen)
+        mask = tf.expand_dims(mask, axis=-1)
+        mask = tf.cast(mask, tf.float32)
+        out = out * mask
+    # None * max_seq_len * embed_dim
+    # according to facebook subword paper, it's sum
+    out = tf.reduce_sum(out, axis=2)
+    return out
+
