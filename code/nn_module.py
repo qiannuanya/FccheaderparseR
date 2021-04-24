@@ -49,3 +49,18 @@ def embed_subword(x, size, dim, sequence_length, seed=0, mask_zero=False, maxlen
     out = tf.reduce_sum(out, axis=2)
     return out
 
+
+def word_dropout(x, training, dropout=0, seed=0):
+    # word dropout (dropout the entire embedding for some words)
+    """
+    tf.layers.Dropout doesn't work as it can't switch training or inference
+    """
+    if dropout > 0:
+        input_shape = tf.shape(x)
+        noise_shape = [input_shape[0], input_shape[1], 1]
+        x = tf.layers.Dropout(rate=dropout, noise_shape=noise_shape, seed=seed)(x, training=training)
+    return x
+
+
+#### Step 2
+def fasttext(x):
