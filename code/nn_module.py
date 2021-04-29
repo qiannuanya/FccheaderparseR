@@ -82,3 +82,21 @@ def timedistributed_conv1d(x, filter_size):
         padding="same",
         activation=None,
         strides=1)(x)
+    conv = tf.reshape(conv, [input_shape[0], embed_dim, step_dim])
+    conv = tf.transpose(conv, [0, 2, 1])
+    return conv
+
+
+def textcnn(x, num_filters=8, filter_sizes=[2, 3], timedistributed=False):
+    # x: None * step_dim * embed_dim
+    conv_blocks = []
+    for i, filter_size in enumerate(filter_sizes):
+        if timedistributed:
+            conv = timedistributed_conv1d(x, filter_size)
+        else:
+            conv = tf.layers.Conv1D(
+                filters=num_filters,
+                kernel_size=filter_size,
+                padding="same",
+                activation=None,
+                strides=1)(x)
