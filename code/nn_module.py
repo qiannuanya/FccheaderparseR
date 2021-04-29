@@ -64,3 +64,21 @@ def word_dropout(x, training, dropout=0, seed=0):
 
 #### Step 2
 def fasttext(x):
+    return x
+
+
+def timedistributed_conv1d(x, filter_size):
+    """not working"""
+    # None * embed_dim * step_dim
+    input_shape = tf.shape(x)
+    step_dim = input_shape[1]
+    embed_dim = input_shape[2]
+    x = tf.transpose(x, [0, 2, 1])
+    # None * embed_dim * step_dim
+    x = tf.reshape(x, [input_shape[0] * embed_dim, step_dim, 1])
+    conv = tf.layers.Conv1D(
+        filters=1,
+        kernel_size=filter_size,
+        padding="same",
+        activation=None,
+        strides=1)(x)
