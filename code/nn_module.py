@@ -115,3 +115,15 @@ def textrnn(x, num_units, cell_type, sequence_length, mask_zero=False, scope=Non
         cell_fw = tf.nn.rnn_cell.GRUCell(num_units)
     elif cell_type == "lstm":
         cell_fw = tf.nn.rnn_cell.LSTMCell(num_units)
+    if mask_zero:
+        x, _ = tf.nn.dynamic_rnn(cell_fw, x, dtype=tf.float32, sequence_length=sequence_length, scope=scope)
+    else:
+        x, _ = tf.nn.dynamic_rnn(cell_fw, x, dtype=tf.float32, sequence_length=None, scope=scope)
+    return x
+
+
+def textbirnn(x, num_units, cell_type, sequence_length, mask_zero=False, scope=None):
+    if cell_type == "gru":
+        cell_fw = tf.nn.rnn_cell.GRUCell(num_units)
+        cell_bw = tf.nn.rnn_cell.GRUCell(num_units)
+    elif cell_type == "lstm":
