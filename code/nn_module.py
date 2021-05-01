@@ -100,3 +100,18 @@ def textcnn(x, num_filters=8, filter_sizes=[2, 3], timedistributed=False):
                 padding="same",
                 activation=None,
                 strides=1)(x)
+        conv = tf.layers.BatchNormalization()(conv)
+        conv = tf.nn.relu(conv)
+        conv_blocks.append(conv)
+    if len(conv_blocks) > 1:
+        z = tf.concat(conv_blocks, axis=-1)
+    else:
+        z = conv_blocks[0]
+    return z
+
+
+def textrnn(x, num_units, cell_type, sequence_length, mask_zero=False, scope=None):
+    if cell_type == "gru":
+        cell_fw = tf.nn.rnn_cell.GRUCell(num_units)
+    elif cell_type == "lstm":
+        cell_fw = tf.nn.rnn_cell.LSTMCell(num_units)
