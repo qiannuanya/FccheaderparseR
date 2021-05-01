@@ -127,3 +127,22 @@ def textbirnn(x, num_units, cell_type, sequence_length, mask_zero=False, scope=N
         cell_fw = tf.nn.rnn_cell.GRUCell(num_units)
         cell_bw = tf.nn.rnn_cell.GRUCell(num_units)
     elif cell_type == "lstm":
+        cell_fw = tf.nn.rnn_cell.LSTMCell(num_units)
+        cell_bw = tf.nn.rnn_cell.LSTMCell(num_units)
+    if mask_zero:
+        (output_fw, output_bw), _ = tf.nn.bidirectional_dynamic_rnn(
+            cell_fw, cell_bw, x, dtype=tf.float32, sequence_length=sequence_length, scope=scope)
+    else:
+        (output_fw, output_bw), _ = tf.nn.bidirectional_dynamic_rnn(
+            cell_fw, cell_bw, x, dtype=tf.float32, sequence_length=None, scope=scope)
+    x = 0.5 * (output_fw + output_bw)
+    return x
+
+
+def encode(x, method, params, sequence_length, mask_zero=False, scope=None):
+    """
+    :param x: shape=(None,seqlen,dim)
+    :param params:
+    :return: shape=(None,seqlen,dim)
+    """
+    if method == "fasttext":
