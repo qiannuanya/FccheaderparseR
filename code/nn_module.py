@@ -146,3 +146,17 @@ def encode(x, method, params, sequence_length, mask_zero=False, scope=None):
     :return: shape=(None,seqlen,dim)
     """
     if method == "fasttext":
+        z = fasttext(x)
+    elif method == "textcnn":
+        z = textcnn(x, num_filters=params["cnn_num_filters"], filter_sizes=params["cnn_filter_sizes"],
+                    timedistributed=params["cnn_timedistributed"])
+    elif method == "textrnn":
+        z = textrnn(x, num_units=params["rnn_num_units"], cell_type=params["rnn_cell_type"],
+                    sequence_length=sequence_length, mask_zero=mask_zero, scope=scope)
+    elif method == "textbirnn":
+        z = textbirnn(x, num_units=params["rnn_num_units"], cell_type=params["rnn_cell_type"],
+                      sequence_length=sequence_length, mask_zero=mask_zero, scope=scope)
+    elif method == "fasttext+textcnn":
+        z_f = fasttext(x)
+        z_c = textcnn(x, num_filters=params["cnn_num_filters"], filter_sizes=params["cnn_filter_sizes"],
+                      timedistributed=params["cnn_timedistributed"])
