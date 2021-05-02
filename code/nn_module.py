@@ -196,3 +196,19 @@ def attention(x, feature_dim, sequence_length, mask_zero=False, maxlen=None, eps
     x = tf.reshape(x, [-1, feature_dim])
     """
     The last dimension of the inputs to `Dense` should be defined. Found `None`.
+
+    cann't not use `tf.layers.Dense` here
+    eij = tf.layers.Dense(1)(x)
+
+    see: https://github.com/tensorflow/tensorflow/issues/13348
+    workaround: specify the feature_dim as input
+    """
+
+    eij = tf.layers.Dense(1, activation=tf.nn.tanh, kernel_initializer=tf.glorot_uniform_initializer(seed=seed),
+                          dtype=tf.float32, bias_initializer=tf.zeros_initializer())(x)
+    eij = tf.reshape(eij, [-1, step_dim])
+    a = tf.exp(eij)
+
+    # apply mask after the exp. will be re-normalized next
+    if mask_zero:
+        # None * step_dim
