@@ -212,3 +212,17 @@ def attention(x, feature_dim, sequence_length, mask_zero=False, maxlen=None, eps
     # apply mask after the exp. will be re-normalized next
     if mask_zero:
         # None * step_dim
+        mask = tf.sequence_mask(sequence_length, maxlen)
+        mask = tf.cast(mask, tf.float32)
+        a = a * mask
+
+    # in some cases especially in the early stages of training the sum may be almost zero
+    a /= tf.cast(tf.reduce_sum(a, axis=1, keep_dims=True) + epsilon, tf.float32)
+
+    a = tf.expand_dims(a, axis=-1)
+    return a
+
+
+def attend(x, sequence_length=None, method="ave", context=None, feature_dim=None, mask_zero=False, maxlen=None,
+           epsilon=1e-8, bn=True, training=False, seed=0, reuse=True, name="attend"):
+    if method == "ave":
