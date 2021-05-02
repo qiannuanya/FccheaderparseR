@@ -177,3 +177,22 @@ def encode(x, method, params, sequence_length, mask_zero=False, scope=None):
                       timedistributed=params["cnn_timedistributed"])
         z_r = textrnn(x, num_units=params["rnn_num_units"], cell_type=params["rnn_cell_type"],
                       sequence_length=sequence_length, mask_zero=mask_zero, scope=scope)
+        z = tf.concat([z_f, z_c, z_r], axis=-1)
+    elif method == "fasttext+textcnn+textbirnn":
+        z_f = fasttext(x)
+        z_c = textcnn(x, num_filters=params["cnn_num_filters"], filter_sizes=params["cnn_filter_sizes"],
+                      timedistributed=params["cnn_timedistributed"])
+        z_b = textbirnn(x, num_units=params["rnn_num_units"], cell_type=params["rnn_cell_type"],
+                        sequence_length=sequence_length, mask_zero=mask_zero, scope=scope)
+        z = tf.concat([z_f, z_c, z_b], axis=-1)
+    return z
+
+
+#### Step 3
+def attention(x, feature_dim, sequence_length, mask_zero=False, maxlen=None, epsilon=1e-8, seed=0):
+    input_shape = tf.shape(x)
+    step_dim = input_shape[1]
+    # feature_dim = input_shape[2]
+    x = tf.reshape(x, [-1, feature_dim])
+    """
+    The last dimension of the inputs to `Dense` should be defined. Found `None`.
