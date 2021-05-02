@@ -160,3 +160,20 @@ def encode(x, method, params, sequence_length, mask_zero=False, scope=None):
         z_f = fasttext(x)
         z_c = textcnn(x, num_filters=params["cnn_num_filters"], filter_sizes=params["cnn_filter_sizes"],
                       timedistributed=params["cnn_timedistributed"])
+        z = tf.concat([z_f, z_c], axis=-1)
+    elif method == "fasttext+textrnn":
+        z_f = fasttext(x)
+        z_r = textrnn(x, num_units=params["rnn_num_units"], cell_type=params["rnn_cell_type"],
+                      sequence_length=sequence_length, mask_zero=mask_zero, scope=scope)
+        z = tf.concat([z_f, z_r], axis=-1)
+    elif method == "fasttext+textbirnn":
+        z_f = fasttext(x)
+        z_b = textbirnn(x, num_units=params["rnn_num_units"], cell_type=params["rnn_cell_type"],
+                        sequence_length=sequence_length, mask_zero=mask_zero, scope=scope)
+        z = tf.concat([z_f, z_b], axis=-1)
+    elif method == "fasttext+textcnn+textrnn":
+        z_f = fasttext(x)
+        z_c = textcnn(x, num_filters=params["cnn_num_filters"], filter_sizes=params["cnn_filter_sizes"],
+                      timedistributed=params["cnn_timedistributed"])
+        z_r = textrnn(x, num_units=params["rnn_num_units"], cell_type=params["rnn_cell_type"],
+                      sequence_length=sequence_length, mask_zero=mask_zero, scope=scope)
