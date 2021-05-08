@@ -263,3 +263,17 @@ def attend(x, sequence_length=None, method="ave", context=None, feature_dim=None
             context = tf.expand_dims(context, axis=1)
             context = tf.tile(context, [1, step_dim, 1])
             y = tf.concat([x, context], axis=-1)
+        else:
+            y = x
+        a = attention(y, feature_dim, sequence_length, mask_zero, maxlen, seed=seed)
+        z = tf.reduce_sum(x * a, axis=1)
+    if bn:
+        # training=False has slightly better performance
+        z = tf.layers.BatchNormalization()(z, training=False)
+        # z = batch_normalization(z, training=training, name=name)
+    return z
+
+
+#### Step 4
+def _dense_block_mode1(x, hidden_units, dropouts, densenet=False, training=False, seed=0, bn=False, name="dense_block"):
+    """
