@@ -291,3 +291,19 @@ def _dense_block_mode1(x, hidden_units, dropouts, densenet=False, training=False
         if bn:
             z = batch_normalization(z, training=training, name=name+"-"+str(i))
         z = tf.nn.relu(z)
+        # z = tf.nn.selu(z)
+        z = tf.layers.Dropout(d, seed=seed * i)(z, training=training) if d > 0 else z
+        if densenet:
+            x = tf.concat([x, z], axis=-1)
+        else:
+            x = z
+    return x
+
+
+def _dense_block_mode2(x, hidden_units, dropouts, densenet=False, training=False, seed=0, bn=False, name="dense_block"):
+    """
+    :param x:
+    :param hidden_units:
+    :param dropouts:
+    :param densenet: enable densenet
+    :return:
