@@ -277,3 +277,17 @@ def attend(x, sequence_length=None, method="ave", context=None, feature_dim=None
 #### Step 4
 def _dense_block_mode1(x, hidden_units, dropouts, densenet=False, training=False, seed=0, bn=False, name="dense_block"):
     """
+    :param x:
+    :param hidden_units:
+    :param dropouts:
+    :param densenet: enable densenet
+    :return:
+    Ref: https://github.com/titu1994/DenseNet
+    """
+    for i, (h, d) in enumerate(zip(hidden_units, dropouts)):
+        z = tf.layers.Dense(h, kernel_initializer=tf.glorot_uniform_initializer(seed=seed * i),
+                            dtype=tf.float32,
+                            bias_initializer=tf.zeros_initializer())(x)
+        if bn:
+            z = batch_normalization(z, training=training, name=name+"-"+str(i))
+        z = tf.nn.relu(z)
