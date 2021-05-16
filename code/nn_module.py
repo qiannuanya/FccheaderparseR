@@ -321,3 +321,18 @@ def _dense_block_mode2(x, hidden_units, dropouts, densenet=False, training=False
         else:
             x = z
     return x
+
+
+def dense_block(x, hidden_units, dropouts, densenet=False, training=False, seed=0, bn=False, name="dense_block"):
+    return _dense_block_mode1(x, hidden_units, dropouts, densenet, training, seed, bn, name)
+
+
+def _resnet_branch_mode1(x, hidden_units, dropouts, training, seed=0):
+    h1, h2, h3 = hidden_units
+    dr1, dr2, dr3 = dropouts
+    # branch 2
+    x2 = tf.layers.Dense(h1, kernel_initializer=tf.glorot_uniform_initializer(seed=seed * 2), dtype=tf.float32,
+                         bias_initializer=tf.zeros_initializer())(x)
+    x2 = tf.layers.BatchNormalization()(x2)
+    x2 = tf.nn.relu(x2)
+    x2 = tf.layers.Dropout(dr1, seed=seed * 1)(x2, training=training) if dr1 > 0 else x2
