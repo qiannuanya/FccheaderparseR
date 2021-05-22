@@ -385,3 +385,19 @@ def _resnet_block_mode1(x, hidden_units, dropouts, cardinality=1, dense_shortcut
     x = tf.layers.Dropout(dr3, seed=seed * 4)(x, training=training) if dr3 > 0 else x
     return x
 
+
+def _resnet_branch_mode2(x, hidden_units, dropouts, training=False, seed=0):
+    h1, h2, h3 = hidden_units
+    dr1, dr2, dr3 = dropouts
+    # branch 2: bn-relu->weight
+    x2 = tf.layers.BatchNormalization()(x)
+    x2 = tf.nn.relu(x2)
+    x2 = tf.layers.Dropout(dr1)(x2, training=training) if dr1 > 0 else x2
+    x2 = tf.layers.Dense(h1, kernel_initializer=tf.glorot_uniform_initializer(seed * 1), dtype=tf.float32,
+                         bias_initializer=tf.zeros_initializer())(x2)
+
+    x2 = tf.layers.BatchNormalization()(x2)
+    x2 = tf.nn.relu(x2)
+    x2 = tf.layers.Dropout(dr2)(x2, training=training) if dr2 > 0 else x2
+    x2 = tf.layers.Dense(h2, kernel_initializer=tf.glorot_uniform_initializer(seed * 2), dtype=tf.float32,
+                         bias_initializer=tf.zeros_initializer())(x2)
