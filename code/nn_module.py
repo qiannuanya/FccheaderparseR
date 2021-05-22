@@ -369,3 +369,19 @@ def _resnet_block_mode1(x, hidden_units, dropouts, cardinality=1, dense_shortcut
     xs = []
     # branch 0
     if dense_shortcut:
+        x0 = tf.layers.Dense(h3, kernel_initializer=tf.glorot_uniform_initializer(seed=seed * 1), dtype=tf.float32,
+                             bias_initializer=tf.zeros_initializer())(x)
+        x0 = tf.layers.BatchNormalization()(x0)
+        xs.append(x0)
+    else:
+        xs.append(x)
+
+    # branch 1 ~ cardinality
+    for i in range(cardinality):
+        xs.append(_resnet_branch_mode1(x, hidden_units, dropouts, training, seed))
+
+    x = tf.add_n(xs)
+    x = tf.nn.relu(x)
+    x = tf.layers.Dropout(dr3, seed=seed * 4)(x, training=training) if dr3 > 0 else x
+    return x
+
