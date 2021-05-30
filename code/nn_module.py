@@ -401,3 +401,17 @@ def _resnet_branch_mode2(x, hidden_units, dropouts, training=False, seed=0):
     x2 = tf.layers.Dropout(dr2)(x2, training=training) if dr2 > 0 else x2
     x2 = tf.layers.Dense(h2, kernel_initializer=tf.glorot_uniform_initializer(seed * 2), dtype=tf.float32,
                          bias_initializer=tf.zeros_initializer())(x2)
+
+    x2 = tf.layers.BatchNormalization()(x2)
+    x2 = tf.nn.relu(x2)
+    x2 = tf.layers.Dropout(dr3)(x2, training=training) if dr3 > 0 else x2
+    x2 = tf.layers.Dense(h3, kernel_initializer=tf.glorot_uniform_initializer(seed * 3), dtype=tf.float32,
+                         bias_initializer=tf.zeros_initializer())(x2)
+
+    return x2
+
+
+def _resnet_block_mode2(x, hidden_units, dropouts, cardinality=1, dense_shortcut=False, training=False, seed=0):
+    """A block that has a dense layer at shortcut.
+    # Arguments
+        input_tensor: input tensor
