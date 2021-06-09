@@ -23,3 +23,19 @@ class LazyPowerSignOptimizer(optimizer.Optimizer):
     See [Bello et. al., 2017](https://arxiv.org/abs/1709.07417)
     @@__init__
     """
+
+    def __init__(self, learning_rate=0.001, alpha=0.01, beta=0.5, use_locking=False, name="PowerSign"):
+        super(LazyPowerSignOptimizer, self).__init__(use_locking, name)
+        self._lr = learning_rate
+        self._alpha = alpha
+        self._beta = beta
+
+        # Tensor versions of the constructor arguments, created in _prepare().
+        self._lr_t = None
+        self._alpha_t = None
+        self._beta_t = None
+
+    def _prepare(self):
+        self._lr_t = ops.convert_to_tensor(self._lr, name="learning_rate")
+        self._alpha_t = ops.convert_to_tensor(self._beta, name="alpha_t")
+        self._beta_t = ops.convert_to_tensor(self._beta, name="beta_t")
