@@ -39,3 +39,20 @@ class LazyPowerSignOptimizer(optimizer.Optimizer):
         self._lr_t = ops.convert_to_tensor(self._lr, name="learning_rate")
         self._alpha_t = ops.convert_to_tensor(self._beta, name="alpha_t")
         self._beta_t = ops.convert_to_tensor(self._beta, name="beta_t")
+
+    def _create_slots(self, var_list):
+        # Create slots for the first and second moments.
+        for v in var_list:
+            self._zeros_slot(v, "m", self._name)
+
+    def _apply_dense(self, grad, var):
+        lr_t = math_ops.cast(self._lr_t, var.dtype.base_dtype)
+        alpha_t = math_ops.cast(self._alpha_t, var.dtype.base_dtype)
+        beta_t = math_ops.cast(self._beta_t, var.dtype.base_dtype)
+
+        eps = 1e-7  # cap for moving average
+
+        m = self.get_slot(var, "m")
+        m_t = m.assign(tf.maximum(beta_t * m + eps, tf.abs(grad)))
+
+        var_update = state_ops.assign_sub(var, lr_t * grad * tf.exp(
