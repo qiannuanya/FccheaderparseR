@@ -56,3 +56,20 @@ class LazyPowerSignOptimizer(optimizer.Optimizer):
         m_t = m.assign(tf.maximum(beta_t * m + eps, tf.abs(grad)))
 
         var_update = state_ops.assign_sub(var, lr_t * grad * tf.exp(
+            tf.log(alpha_t) * tf.sign(grad) * tf.sign(m_t)))  # Update 'ref' by subtracting 'value
+        # Create an op that groups multiple operations.
+        # When this op finishes, all ops in input have finished
+        return control_flow_ops.group(*[var_update, m_t])
+
+    def _apply_sparse(self, grad, var):
+        lr_t = math_ops.cast(self._lr_t, var.dtype.base_dtype)
+        alpha_t = math_ops.cast(self._alpha_t, var.dtype.base_dtype)
+        beta_t = math_ops.cast(self._beta_t, var.dtype.base_dtype)
+
+        eps = 1e-7  # cap for moving average
+
+        m = self.get_slot(var, "m")
+        m_slice = tf.gather(m, grad.indices)
+        m_t = state_ops.scatter_update(m, grad.indices,
+                                       tf.maximum(beta_t * m_slice + eps, tf.abs(grad.values)))
+        m_t_slice = tf.gather(m_t, grad.indices)
