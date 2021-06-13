@@ -73,3 +73,22 @@ class LazyPowerSignOptimizer(optimizer.Optimizer):
         m_t = state_ops.scatter_update(m, grad.indices,
                                        tf.maximum(beta_t * m_slice + eps, tf.abs(grad.values)))
         m_t_slice = tf.gather(m_t, grad.indices)
+
+        var_update = state_ops.scatter_sub(var, grad.indices, lr_t * grad.values * tf.exp(
+            tf.log(alpha_t) * tf.sign(grad.values) * tf.sign(m_t_slice)))  # Update 'ref' by subtracting 'value
+        # Create an op that groups multiple operations.
+        # When this op finishes, all ops in input have finished
+        return control_flow_ops.group(*[var_update, m_t])
+
+
+class LazyAddSignOptimizer(optimizer.Optimizer):
+    """Implementation of AddSign.
+    See [Bello et. al., 2017](https://arxiv.org/abs/1709.07417)
+    @@__init__
+    """
+
+    def __init__(self, learning_rate=1.001, alpha=0.01, beta=0.5, use_locking=False, name="AddSign"):
+        super(LazyAddSignOptimizer, self).__init__(use_locking, name)
+        self._lr = learning_rate
+        self._alpha = alpha
+        self._beta = beta
