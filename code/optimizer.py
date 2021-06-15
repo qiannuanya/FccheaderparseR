@@ -92,3 +92,20 @@ class LazyAddSignOptimizer(optimizer.Optimizer):
         self._lr = learning_rate
         self._alpha = alpha
         self._beta = beta
+
+        # Tensor versions of the constructor arguments, created in _prepare().
+        self._lr_t = None
+        self._alpha_t = None
+        self._beta_t = None
+
+    def _prepare(self):
+        self._lr_t = ops.convert_to_tensor(self._lr, name="learning_rate")
+        self._alpha_t = ops.convert_to_tensor(self._beta, name="beta_t")
+        self._beta_t = ops.convert_to_tensor(self._beta, name="beta_t")
+
+    def _create_slots(self, var_list):
+        # Create slots for the first and second moments.
+        for v in var_list:
+            self._zeros_slot(v, "m", self._name)
+
+    def _apply_dense(self, grad, var):
