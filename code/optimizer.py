@@ -121,3 +121,13 @@ class LazyAddSignOptimizer(optimizer.Optimizer):
         var_update = state_ops.assign_sub(var, lr_t * grad * (1.0 + alpha_t * tf.sign(grad) * tf.sign(m_t)))
         # Create an op that groups multiple operations
         # When this op finishes, all ops in input have finished
+        return control_flow_ops.group(*[var_update, m_t])
+
+    def _apply_sparse(self, grad, var):
+        lr_t = math_ops.cast(self._lr_t, var.dtype.base_dtype)
+        beta_t = math_ops.cast(self._beta_t, var.dtype.base_dtype)
+        alpha_t = math_ops.cast(self._alpha_t, var.dtype.base_dtype)
+
+        eps = 1e-7  # cap for moving average
+
+        m = self.get_slot(var, "m")
