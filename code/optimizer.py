@@ -131,3 +131,23 @@ class LazyAddSignOptimizer(optimizer.Optimizer):
         eps = 1e-7  # cap for moving average
 
         m = self.get_slot(var, "m")
+        m_slice = tf.gather(m, grad.indices)
+        m_t = state_ops.scatter_update(m, grad.indices,
+                                       tf.maximum(beta_t * m_slice + eps, tf.abs(grad.values)))
+        m_t_slice = tf.gather(m_t, grad.indices)
+
+        var_update = state_ops.scatter_sub(var, grad.indices,
+                                           lr_t * grad.values * (
+                                                   1.0 + alpha_t * tf.sign(grad.values) * tf.sign(m_t_slice)))
+
+        # Create an op that groups multiple operations
+        # When this op finishes, all ops in input have finished
+        return control_flow_ops.group(*[var_update, m_t])
+
+
+class LazyAMSGradOptimizer(optimizer.Optimizer):
+    def __init__(self, learning_rate=0.002, beta1=0.9, beta2=0.999, epsilon=1e-8,
+                 use_locking=False, name="AMSGrad"):
+        super(LazyAMSGradOptimizer, self).__init__(use_locking, name)
+        self._lr = learning_rate
+        self._beta1 = beta1
