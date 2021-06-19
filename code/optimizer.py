@@ -167,3 +167,21 @@ class LazyAMSGradOptimizer(optimizer.Optimizer):
         self._epsilon_t = ops.convert_to_tensor(self._epsilon, name="epsilon")
 
     def _create_slots(self, var_list):
+        # Create slots for the first and second moments.
+        for v in var_list:
+            self._zeros_slot(v, "m", self._name)
+            self._zeros_slot(v, "v", self._name)
+            self._zeros_slot(v, "v_prime", self._name)
+
+    def _apply_dense(self, grad, var):
+        lr_t = math_ops.cast(self._lr_t, var.dtype.base_dtype)
+        beta1_t = math_ops.cast(self._beta1_t, var.dtype.base_dtype)
+        beta2_t = math_ops.cast(self._beta2_t, var.dtype.base_dtype)
+        epsilon_t = math_ops.cast(self._epsilon_t, var.dtype.base_dtype)
+
+        # the following equations given in [1]
+        # m_t = beta1 * m + (1 - beta1) * g_t
+        m = self.get_slot(var, "m")
+        m_t = state_ops.assign(m, beta1_t * m + (1. - beta1_t) * grad, use_locking=self._use_locking)
+
+        # v_t = beta2 * v + (1 - beta2) * (g_t * g_t)
