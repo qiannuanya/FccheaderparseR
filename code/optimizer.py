@@ -151,3 +151,19 @@ class LazyAMSGradOptimizer(optimizer.Optimizer):
         super(LazyAMSGradOptimizer, self).__init__(use_locking, name)
         self._lr = learning_rate
         self._beta1 = beta1
+        self._beta2 = beta2
+        self._epsilon = epsilon
+
+        # Tensor versions of the constructor arguments, created in _prepare().
+        self._lr_t = None
+        self._beta1_t = None
+        self._beta2_t = None
+        self._epsilon_t = None
+
+    def _prepare(self):
+        self._lr_t = ops.convert_to_tensor(self._lr, name="learning_rate")
+        self._beta1_t = ops.convert_to_tensor(self._beta1, name="beta1")
+        self._beta2_t = ops.convert_to_tensor(self._beta2, name="beta2")
+        self._epsilon_t = ops.convert_to_tensor(self._epsilon, name="epsilon")
+
+    def _create_slots(self, var_list):
