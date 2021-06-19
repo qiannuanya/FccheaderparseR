@@ -185,3 +185,20 @@ class LazyAMSGradOptimizer(optimizer.Optimizer):
         m_t = state_ops.assign(m, beta1_t * m + (1. - beta1_t) * grad, use_locking=self._use_locking)
 
         # v_t = beta2 * v + (1 - beta2) * (g_t * g_t)
+        v = self.get_slot(var, "v")
+        v_t = state_ops.assign(v, beta2_t * v + (1. - beta2_t) * tf.square(grad), use_locking=self._use_locking)
+        v_prime = self.get_slot(var, "v_prime")
+        v_t_prime = state_ops.assign(v_prime, tf.maximum(v_prime, v_t))
+
+        var_update = state_ops.assign_sub(var,
+                                          lr_t * m_t / (tf.sqrt(v_t_prime) + epsilon_t),
+                                          use_locking=self._use_locking)
+
+        return control_flow_ops.group(*[var_update, m_t, v_t, v_t_prime])
+
+    # keras Nadam update rule
+    def _apply_sparse(self, grad, var):
+        lr_t = math_ops.cast(self._lr_t, var.dtype.base_dtype)
+        beta1_t = math_ops.cast(self._beta1_t, var.dtype.base_dtype)
+        beta2_t = math_ops.cast(self._beta2_t, var.dtype.base_dtype)
+        epsilon_t = math_ops.cast(self._epsilon_t, var.dtype.base_dtype)
