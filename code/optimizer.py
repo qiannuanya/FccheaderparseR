@@ -217,3 +217,21 @@ class LazyAMSGradOptimizer(optimizer.Optimizer):
         v_t = state_ops.scatter_update(v, grad.indices,
                                        beta2_t * array_ops.gather(v, grad.indices) +
                                        (1. - beta2_t) * tf.square(grad.values),
+                                       use_locking=self._use_locking)
+        v_prime = self.get_slot(var, "v_prime")
+        v_t_slice = tf.gather(v_t, grad.indices)
+        v_prime_slice = tf.gather(v_prime, grad.indices)
+        v_t_prime = state_ops.scatter_update(v_prime, grad.indices, tf.maximum(v_prime_slice, v_t_slice))
+
+        v_t_prime_slice = array_ops.gather(v_t_prime, grad.indices)
+        var_update = state_ops.scatter_sub(var, grad.indices,
+                                           lr_t * m_t_slice / (math_ops.sqrt(v_t_prime_slice) + epsilon_t),
+                                           use_locking=self._use_locking)
+
+        return control_flow_ops.group(*[var_update, m_t, v_t, v_t_prime])
+
+
+class LazyNadamOptimizer(optimizer.Optimizer):
+    def __init__(self, learning_rate=0.002, beta1=0.9, beta2=0.999, epsilon=1e-8,
+                 schedule_decay=0.004, use_locking=False, name="Nadam"):
+        super(LazyNadamOptimizer, self).__init__(use_locking, name)
