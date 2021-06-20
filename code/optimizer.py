@@ -202,3 +202,18 @@ class LazyAMSGradOptimizer(optimizer.Optimizer):
         beta1_t = math_ops.cast(self._beta1_t, var.dtype.base_dtype)
         beta2_t = math_ops.cast(self._beta2_t, var.dtype.base_dtype)
         epsilon_t = math_ops.cast(self._epsilon_t, var.dtype.base_dtype)
+
+        # the following equations given in [1]
+        # m_t = beta1 * m + (1 - beta1) * g_t
+        m = self.get_slot(var, "m")
+        m_t = state_ops.scatter_update(m, grad.indices,
+                                       beta1_t * array_ops.gather(m, grad.indices) +
+                                       (1. - beta1_t) * grad.values,
+                                       use_locking=self._use_locking)
+        m_t_slice = tf.gather(m_t, grad.indices)
+
+        # v_t = beta2 * v + (1 - beta2) * (g_t * g_t)
+        v = self.get_slot(var, "v")
+        v_t = state_ops.scatter_update(v, grad.indices,
+                                       beta2_t * array_ops.gather(v, grad.indices) +
+                                       (1. - beta2_t) * tf.square(grad.values),
