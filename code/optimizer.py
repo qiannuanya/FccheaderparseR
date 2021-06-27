@@ -265,3 +265,20 @@ class LazyNadamOptimizer(optimizer.Optimizer):
         self._lr_t = ops.convert_to_tensor(self._lr, name="learning_rate")
         self._beta1_t = ops.convert_to_tensor(self._beta1, name="beta1")
         self._beta2_t = ops.convert_to_tensor(self._beta2, name="beta2")
+        self._epsilon_t = ops.convert_to_tensor(self._epsilon, name="epsilon")
+        self._schedule_decay_t = ops.convert_to_tensor(self._schedule_decay, name="schedule_decay")
+
+    def _create_slots(self, var_list):
+        # Create the beta1 and beta2 accumulators on the same device as the first
+        # variable. Sort the var_list to make sure this device is consistent across
+        # workers (these need to go on the same PS, otherwise some updates are
+        # silently ignored).
+        first_var = min(var_list, key=lambda x: x.name)
+
+        create_new = self._iterations is None
+        if not create_new and context.in_graph_mode():
+            create_new = (self._iterations.graph is not first_var.graph)
+
+        if create_new:
+            with ops.colocate_with(first_var):
+                self._beta1_power = variable_scope.variable(self._beta1,
