@@ -296,3 +296,25 @@ class LazyNadamOptimizer(optimizer.Optimizer):
         # Create slots for the first and second moments.
         for v in var_list:
             self._zeros_slot(v, "m", self._name)
+            self._zeros_slot(v, "v", self._name)
+
+    def _get_momentum_cache(self, schedule_decay_t, t):
+        return tf.pow(self._momentum_cache_decay, t * schedule_decay_t)
+        # return beta1_t * (1. - 0.5 * (tf.pow(self._momentum_cache_decay, t * schedule_decay_t)))
+
+    """very slow
+    we simply use the nadam update rule without warming momentum schedule
+    def _apply_dense(self, grad, var):
+        t = math_ops.cast(self._iterations, var.dtype.base_dtype) + 1.
+        m_schedule = math_ops.cast(self._m_schedule, var.dtype.base_dtype)
+        lr_t = math_ops.cast(self._lr_t, var.dtype.base_dtype)
+        beta1_t = math_ops.cast(self._beta1_t, var.dtype.base_dtype)
+        beta2_t = math_ops.cast(self._beta2_t, var.dtype.base_dtype)
+        epsilon_t = math_ops.cast(self._epsilon_t, var.dtype.base_dtype)
+        schedule_decay_t = math_ops.cast(self._schedule_decay_t, var.dtype.base_dtype)
+
+        # Due to the recommendations in [2], i.e. warming momentum schedule
+        # see keras Nadam
+        momentum_cache_t = self._get_momentum_cache(beta1_t, schedule_decay_t, t)
+        momentum_cache_t_1 = self._get_momentum_cache(beta1_t, schedule_decay_t, t+1.)
+        m_schedule_new = m_schedule * momentum_cache_t
