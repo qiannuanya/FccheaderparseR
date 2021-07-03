@@ -318,3 +318,21 @@ class LazyNadamOptimizer(optimizer.Optimizer):
         momentum_cache_t = self._get_momentum_cache(beta1_t, schedule_decay_t, t)
         momentum_cache_t_1 = self._get_momentum_cache(beta1_t, schedule_decay_t, t+1.)
         m_schedule_new = m_schedule * momentum_cache_t
+        m_schedule_next = m_schedule * momentum_cache_t * momentum_cache_t_1
+
+        # the following equations given in [1]
+        # m_t = beta1 * m + (1 - beta1) * g_t
+        m = self.get_slot(var, "m")
+        m_t = state_ops.assign(m, beta1_t * m + (1. - beta1_t) * grad, use_locking=self._use_locking)
+        g_prime = grad / (1. - m_schedule_new)
+        m_t_prime = m_t / (1. - m_schedule_next)
+        m_t_bar = (1. - momentum_cache_t) * g_prime + momentum_cache_t_1 * m_t_prime
+
+        # v_t = beta2 * v + (1 - beta2) * (g_t * g_t)
+        v = self.get_slot(var, "v")
+        v_t = state_ops.assign(v, beta2_t * v + (1. - beta2_t) * tf.square(grad), use_locking=self._use_locking)
+        v_t_prime = v_t / (1. - tf.pow(beta2_t, t))
+
+        var_update = state_ops.assign_sub(var,
+                                      lr_t * m_t_bar / (tf.sqrt(v_t_prime) + epsilon_t),
+                                      use_locking=self._use_locking)
