@@ -388,3 +388,19 @@ class LazyNadamOptimizer(optimizer.Optimizer):
         # Due to the recommendations in [2], i.e. warming momentum schedule
         momentum_cache_power = self._get_momentum_cache(schedule_decay_t, t)
         momentum_cache_t = beta1_t * (1. - 0.5 * momentum_cache_power)
+        momentum_cache_t_1 = beta1_t * (1. - 0.5 * momentum_cache_power * self._momentum_cache_const)
+        m_schedule_new = m_schedule * momentum_cache_t
+        m_schedule_next = m_schedule_new * momentum_cache_t_1
+
+        # the following equations given in [1]
+        # m_t = beta1 * m + (1 - beta1) * g_t
+        m = self.get_slot(var, "m")
+        m_t = state_ops.scatter_update(m, grad.indices,
+                                       beta1_t * array_ops.gather(m, grad.indices) +
+                                       (1. - beta1_t) * grad.values,
+                                       use_locking=self._use_locking)
+        g_prime_slice = grad.values / (1. - m_schedule_new)
+        m_t_prime_slice = array_ops.gather(m_t, grad.indices) / (1. - m_schedule_next)
+        m_t_bar_slice = (1. - momentum_cache_t) * g_prime_slice + momentum_cache_t_1 * m_t_prime_slice
+
+        # v_t = beta2 * v + (1 - beta2) * (g_t * g_t)
