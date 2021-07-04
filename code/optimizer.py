@@ -371,3 +371,20 @@ class LazyNadamOptimizer(optimizer.Optimizer):
             math_ops.cast(self._beta1_t, grad.dtype.base_dtype),
             math_ops.cast(self._beta2_t, grad.dtype.base_dtype),
             math_ops.cast(self._epsilon_t, grad.dtype.base_dtype),
+            grad,
+            use_locking=self._use_locking,
+            use_nesterov=True)
+
+    # keras Nadam update rule
+    def _apply_sparse(self, grad, var):
+        t = math_ops.cast(self._iterations, var.dtype.base_dtype) + 1.
+        m_schedule = math_ops.cast(self._m_schedule, var.dtype.base_dtype)
+        lr_t = math_ops.cast(self._lr_t, var.dtype.base_dtype)
+        beta1_t = math_ops.cast(self._beta1_t, var.dtype.base_dtype)
+        beta2_t = math_ops.cast(self._beta2_t, var.dtype.base_dtype)
+        epsilon_t = math_ops.cast(self._epsilon_t, var.dtype.base_dtype)
+        schedule_decay_t = math_ops.cast(self._schedule_decay_t, var.dtype.base_dtype)
+
+        # Due to the recommendations in [2], i.e. warming momentum schedule
+        momentum_cache_power = self._get_momentum_cache(schedule_decay_t, t)
+        momentum_cache_t = beta1_t * (1. - 0.5 * momentum_cache_power)
