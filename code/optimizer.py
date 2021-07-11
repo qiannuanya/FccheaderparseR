@@ -414,3 +414,21 @@ class LazyNadamOptimizer(optimizer.Optimizer):
         var_update = state_ops.scatter_sub(var, grad.indices,
                                            lr_t * m_t_bar_slice / (math_ops.sqrt(v_t_prime_slice) + epsilon_t),
                                            use_locking=self._use_locking)
+
+        return control_flow_ops.group(*[var_update, m_t, v_t])
+
+    def _finish(self, update_ops, name_scope):
+        # Update the power accumulators.
+        with ops.control_dependencies(update_ops):
+            with ops.colocate_with(self._iterations):
+                update_beta1 = self._beta1_power.assign(
+                    self._beta1_power * self._beta1_t,
+                    use_locking=self._use_locking)
+                update_beta2 = self._beta2_power.assign(
+                    self._beta2_power * self._beta2_t,
+                    use_locking=self._use_locking)
+                t = self._iterations + 1.
+                update_iterations = self._iterations.assign(t, use_locking=self._use_locking)
+                momentum_cache_power = self._get_momentum_cache(self._schedule_decay_t, t)
+                momentum_cache_t = self._beta1_t * (1. - 0.5 * momentum_cache_power)
+                update_m_schedule = self._m_schedule.assign(
