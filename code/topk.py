@@ -69,3 +69,16 @@ class QuickSelect(object):
 
         left, right = 0, len(nums) - 1
         while left <= right:
+            pivot_idx = randint(left, right)
+            new_pivot_idx = PartitionAroundPivot(left, right, pivot_idx, nums)
+            if new_pivot_idx == k - 1:
+                return
+            elif new_pivot_idx > k - 1:
+                right = new_pivot_idx - 1
+            else:  # new_pivot_idx < k - 1.
+                left = new_pivot_idx + 1
+
+
+# top_k_selector = BucketSort()
+
+top_k_selector = QuickSelect()
