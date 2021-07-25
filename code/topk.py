@@ -30,3 +30,14 @@ class BucketSort(object):
 
 
 # Quick Select
+# Time:  O(n) ~ O(n^2), O(n) on average.
+# Space: O(n)
+class QuickSelect(object):
+    def topKFrequent(self, words, k):
+        """
+        :type words: List[str]
+        :type k: int
+        :rtype: List[str]
+        """
+        counts = defaultdict(int)
+        for ws in words:
