@@ -7,4 +7,4 @@ import shutil
 
 
 def _timestamp():
-    now = datet
+    now = datetime.datetime.now()
