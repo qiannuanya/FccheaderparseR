@@ -12,4 +12,4 @@ def _timestamp():
     return now_str
 
 
-def _get_logger(logdir, lognam
+def _get_logger(logdir, logname, loglevel=l
