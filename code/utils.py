@@ -12,4 +12,5 @@ def _timestamp():
     return now_str
 
 
-def _get_logger(logdir, logname, loglevel=l
+def _get_logger(logdir, logname, loglevel=logging.INFO):
+    fmt =
