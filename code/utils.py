@@ -24,4 +24,5 @@ def _get_logger(logdir, logname, loglevel=logging.INFO):
 
     logger = logging.getLogger("")
     logger.addHandler(handler)
-    logger.
+    logger.setLevel(loglevel)
+    r
