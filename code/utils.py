@@ -31,4 +31,5 @@ def _get_logger(logdir, logname, loglevel=logging.INFO):
 def _makedirs(dir, force=False):
     if os.path.exists(dir):
         if force:
-         
+            shutil.rmtree(dir)
+  
