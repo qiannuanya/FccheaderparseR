@@ -31,3 +31,15 @@ class XNN(object):
         self.weights = np.array(self.weights).reshape(-1, 1)
 
     def _init_graph(self):
+        self.graph = tf.Graph()
+        with self.graph.as_default():
+            tf.set_random_seed(self.params["random_seed"])
+
+            #### input
+            self.training = tf.placeholder(tf.bool, shape=[], name="training")
+            # seq
+            self.seq_name = tf.placeholder(tf.int32, shape=[None, None], name="seq_name")
+            self.seq_item_desc = tf.placeholder(tf.int32, shape=[None, None], name="seq_item_desc")
+            self.seq_category_name = tf.placeholder(tf.int32, shape=[None, None], name="seq_category_name")
+            if self.params["use_bigram"]:
+                self.seq_bigram_item_desc = tf.placeholder(tf.int32, shape=[None, None], name="seq_bigram_item_desc")
