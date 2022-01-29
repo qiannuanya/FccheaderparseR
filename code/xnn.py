@@ -58,3 +58,21 @@ class XNN(object):
             self.word_length = tf.placeholder(tf.int32, shape=[None, None], name="word_length")
 
             # other context
+            self.brand_name = tf.placeholder(tf.int32, shape=[None, 1], name="brand_name")
+            # self.category_name = tf.placeholder(tf.int32, shape=[None, 1], name="category_name")
+            self.category_name1 = tf.placeholder(tf.int32, shape=[None, 1], name="category_name1")
+            self.category_name2 = tf.placeholder(tf.int32, shape=[None, 1], name="category_name2")
+            self.category_name3 = tf.placeholder(tf.int32, shape=[None, 1], name="category_name3")
+            self.item_condition_id = tf.placeholder(tf.int32, shape=[None, 1], name="item_condition_id")
+            self.item_condition = tf.placeholder(tf.float32, shape=[None, self.params["MAX_NUM_CONDITIONS"]], name="item_condition")
+            self.shipping = tf.placeholder(tf.int32, shape=[None, 1], name="shipping")
+            self.num_vars = tf.placeholder(tf.float32, shape=[None, self.params["NUM_VARS_DIM"]], name="num_vars")
+
+            # target
+            self.target = tf.placeholder(tf.float32, shape=[None, 1], name="target")
+
+            #### embed
+            # embed seq
+            # std = np.sqrt(2 / self.params["embedding_dim"])
+            std = 0.001
+            minval = -std
