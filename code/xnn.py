@@ -109,3 +109,21 @@ class XNN(object):
             if self.params["use_trigram"]:
                 emb_seq_trigram_item_desc = embed(self.seq_trigram_item_desc, self.params["MAX_NUM_TRIGRAMS"] + 1,
                                                   self.params["embedding_dim"], seed=self.params["random_seed"])
+                if self.params["embedding_dropout"] > 0.:
+                    emb_seq_trigram_item_desc = word_dropout(emb_seq_trigram_item_desc, training=self.training,
+                                                             dropout=self.params["embedding_dropout"],
+                                                             seed=self.params["random_seed"])
+            if self.params["use_subword"]:
+                emb_seq_subword_item_desc = embed(self.seq_subword_item_desc, self.params["MAX_NUM_SUBWORDS"] + 1,
+                                                  self.params["embedding_dim"], seed=self.params["random_seed"])
+                if self.params["embedding_dropout"] > 0.:
+                    emb_seq_subword_item_desc = word_dropout(emb_seq_subword_item_desc, training=self.training,
+                                                             dropout=self.params["embedding_dropout"],
+                                                             seed=self.params["random_seed"])
+
+            # embed other context
+            std = 0.001
+            minval = -std
+            maxval = std
+            emb_brand = tf.Variable(
+                tf.random_uniform([self.params["MAX_NUM_BRANDS"], self.params["embedding_dim"]], minval, maxval,
