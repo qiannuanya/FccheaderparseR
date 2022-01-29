@@ -43,3 +43,18 @@ class XNN(object):
             self.seq_category_name = tf.placeholder(tf.int32, shape=[None, None], name="seq_category_name")
             if self.params["use_bigram"]:
                 self.seq_bigram_item_desc = tf.placeholder(tf.int32, shape=[None, None], name="seq_bigram_item_desc")
+            if self.params["use_trigram"]:
+                self.seq_trigram_item_desc = tf.placeholder(tf.int32, shape=[None, None], name="seq_trigram_item_desc")
+            if self.params["use_subword"]:
+                self.seq_subword_item_desc = tf.placeholder(tf.int32, shape=[None, None], name="seq_subword_item_desc")
+
+            # placeholder for length
+            self.sequence_length_name = tf.placeholder(tf.int32, shape=[None], name="sequence_length_name")
+            self.sequence_length_item_desc = tf.placeholder(tf.int32, shape=[None], name="sequence_length_item_desc")
+            self.sequence_length_category_name = tf.placeholder(tf.int32, shape=[None],
+                                                                name="sequence_length_category_name")
+            self.sequence_length_item_desc_subword = tf.placeholder(tf.int32, shape=[None],
+                                                                    name="sequence_length_item_desc_subword")
+            self.word_length = tf.placeholder(tf.int32, shape=[None, None], name="word_length")
+
+            # other context
