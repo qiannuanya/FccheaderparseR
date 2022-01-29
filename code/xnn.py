@@ -93,3 +93,19 @@ class XNN(object):
             if self.params["embedding_dropout"] > 0.:
                 emb_seq_item_desc = word_dropout(emb_seq_item_desc, training=self.training,
                                                  dropout=self.params["embedding_dropout"],
+                                                 seed=self.params["random_seed"])
+            # emb_seq_category_name = tf.nn.embedding_lookup(emb_word, self.seq_category_name)
+            # if self.params["embedding_dropout"] > 0.:
+            #     emb_seq_category_name = word_dropout(emb_seq_category_name, training=self.training,
+            #                                      dropout=self.params["embedding_dropout"],
+            #                                      seed=self.params["random_seed"])
+            if self.params["use_bigram"]:
+                emb_seq_bigram_item_desc = embed(self.seq_bigram_item_desc, self.params["MAX_NUM_BIGRAMS"] + 1,
+                                                 self.params["embedding_dim"], seed=self.params["random_seed"])
+                if self.params["embedding_dropout"] > 0.:
+                    emb_seq_bigram_item_desc = word_dropout(emb_seq_bigram_item_desc, training=self.training,
+                                                            dropout=self.params["embedding_dropout"],
+                                                            seed=self.params["random_seed"])
+            if self.params["use_trigram"]:
+                emb_seq_trigram_item_desc = embed(self.seq_trigram_item_desc, self.params["MAX_NUM_TRIGRAMS"] + 1,
+                                                  self.params["embedding_dim"], seed=self.params["random_seed"])
