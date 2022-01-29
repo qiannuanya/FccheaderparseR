@@ -76,3 +76,20 @@ class XNN(object):
             # std = np.sqrt(2 / self.params["embedding_dim"])
             std = 0.001
             minval = -std
+            maxval = std
+            emb_word = tf.Variable(
+                tf.random_uniform([self.params["MAX_NUM_WORDS"] + 1, self.params["embedding_dim"]], minval, maxval,
+                                  seed=self.params["random_seed"],
+                                  dtype=tf.float32))
+            # emb_word2 = tf.Variable(tf.random_uniform([self.params["MAX_NUM_WORDS"] + 1, self.params["embedding_dim"]], minval, maxval,
+            #                                     seed=self.params["random_seed"],
+            #                                     dtype=tf.float32))
+            emb_seq_name = tf.nn.embedding_lookup(emb_word, self.seq_name)
+            if self.params["embedding_dropout"] > 0.:
+                emb_seq_name = word_dropout(emb_seq_name, training=self.training,
+                                            dropout=self.params["embedding_dropout"],
+                                            seed=self.params["random_seed"])
+            emb_seq_item_desc = tf.nn.embedding_lookup(emb_word, self.seq_item_desc)
+            if self.params["embedding_dropout"] > 0.:
+                emb_seq_item_desc = word_dropout(emb_seq_item_desc, training=self.training,
+                                                 dropout=self.params["embedding_dropout"],
