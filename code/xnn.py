@@ -127,3 +127,20 @@ class XNN(object):
             maxval = std
             emb_brand = tf.Variable(
                 tf.random_uniform([self.params["MAX_NUM_BRANDS"], self.params["embedding_dim"]], minval, maxval,
+                                  seed=self.params["random_seed"],
+                                  dtype=tf.float32))
+            emb_brand_name = tf.nn.embedding_lookup(emb_brand, self.brand_name)
+            # emb_brand_name = embed(self.brand_name, self.params["MAX_NUM_BRANDS"], self.params["embedding_dim"],
+            #                        flatten=False, seed=self.params["random_seed"])
+            # emb_category_name = embed(self.category_name, MAX_NUM_CATEGORIES, self.params["embedding_dim"],
+            #                           flatten=False)
+            emb_category_name1 = embed(self.category_name1, self.params["MAX_NUM_CATEGORIES_LST"][0], self.params["embedding_dim"],
+                                       flatten=False, seed=self.params["random_seed"])
+            emb_category_name2 = embed(self.category_name2, self.params["MAX_NUM_CATEGORIES_LST"][1], self.params["embedding_dim"],
+                                       flatten=False, seed=self.params["random_seed"])
+            emb_category_name3 = embed(self.category_name3, self.params["MAX_NUM_CATEGORIES_LST"][2], self.params["embedding_dim"],
+                                       flatten=False, seed=self.params["random_seed"])
+            emb_item_condition = embed(self.item_condition_id, self.params["MAX_NUM_CONDITIONS"] + 1, self.params["embedding_dim"],
+                                       flatten=False, seed=self.params["random_seed"])
+            emb_shipping = embed(self.shipping, self.params["MAX_NUM_SHIPPINGS"], self.params["embedding_dim"],
+                                 flatten=False, seed=self.params["random_seed"])
