@@ -199,3 +199,18 @@ class XNN(object):
             feature_dim = context_size + self.params["encode_text_dim"]
             # context = None
             feature_dim = self.params["encode_text_dim"]
+            att_seq_name = attend(enc_seq_name, method=self.params["attend_method"],
+                                  context=None, feature_dim=feature_dim,
+                                  sequence_length=self.sequence_length_name,
+                                  maxlen=self.params["max_sequence_length_name"],
+                                  mask_zero=self.params["embedding_mask_zero"],
+                                  training=self.training,
+                                  seed=self.params["random_seed"],
+                                  name="att_seq_name_attend")
+            att_seq_item_desc = attend(enc_seq_item_desc, method=self.params["attend_method"],
+                                       context=None, feature_dim=feature_dim,
+                                       sequence_length=self.sequence_length_item_desc,
+                                       maxlen=self.params["max_sequence_length_item_desc"],
+                                       mask_zero=self.params["embedding_mask_zero"],
+                                       training=self.training,
+                                       seed=self.params["random_seed"],
