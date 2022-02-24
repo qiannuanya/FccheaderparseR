@@ -164,3 +164,19 @@ class XNN(object):
                                                   params=self.params,
                                                   sequence_length=self.sequence_length_item_desc,
                                                   mask_zero=self.params["embedding_mask_zero"],
+                                                  scope="enc_seq_bigram_item_desc")
+            if self.params["use_trigram"]:
+                enc_seq_trigram_item_desc = encode(emb_seq_trigram_item_desc, method="fasttext",
+                                                   params=self.params,
+                                                   sequence_length=self.sequence_length_item_desc,
+                                                   mask_zero=self.params["embedding_mask_zero"],
+                                                   scope="enc_seq_trigram_item_desc")
+            # use fasttext encode method for the following
+            if self.params["use_subword"]:
+                enc_seq_subword_item_desc = encode(emb_seq_subword_item_desc, method="fasttext",
+                                                   params=self.params,
+                                                   sequence_length=self.sequence_length_item_desc_subword,
+                                                   mask_zero=self.params["embedding_mask_zero"],
+                                                   scope="enc_seq_subword_item_desc")
+
+            context = tf.concat([
