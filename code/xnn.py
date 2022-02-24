@@ -144,3 +144,23 @@ class XNN(object):
                                        flatten=False, seed=self.params["random_seed"])
             emb_shipping = embed(self.shipping, self.params["MAX_NUM_SHIPPINGS"], self.params["embedding_dim"],
                                  flatten=False, seed=self.params["random_seed"])
+
+            #### encode
+            enc_seq_name = encode(emb_seq_name, method=self.params["encode_method"],
+                                  params=self.params,
+                                  sequence_length=self.sequence_length_name,
+                                  mask_zero=self.params["embedding_mask_zero"],
+                                  scope="enc_seq_name")
+            enc_seq_item_desc = encode(emb_seq_item_desc, method=self.params["encode_method"],
+                                       params=self.params, sequence_length=self.sequence_length_item_desc,
+                                       mask_zero=self.params["embedding_mask_zero"],
+                                       scope="enc_seq_item_desc")
+            # enc_seq_category_name = encode(emb_seq_category_name, method=self.params["encode_method"],
+            #                                params=self.params, sequence_length=self.sequence_length_category_name,
+            #                                mask_zero=self.params["embedding_mask_zero"],
+            #                                scope="enc_seq_category_name")
+            if self.params["use_bigram"]:
+                enc_seq_bigram_item_desc = encode(emb_seq_bigram_item_desc, method="fasttext",
+                                                  params=self.params,
+                                                  sequence_length=self.sequence_length_item_desc,
+                                                  mask_zero=self.params["embedding_mask_zero"],
