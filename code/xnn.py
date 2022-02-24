@@ -180,3 +180,22 @@ class XNN(object):
                                                    scope="enc_seq_subword_item_desc")
 
             context = tf.concat([
+                # att_seq_category_name,
+                tf.layers.flatten(emb_brand_name),
+                # tf.layers.flatten(emb_category_name),
+                tf.layers.flatten(emb_category_name1),
+                tf.layers.flatten(emb_category_name2),
+                tf.layers.flatten(emb_category_name3),
+                self.item_condition,
+                tf.cast(self.shipping, tf.float32),
+                self.num_vars],
+                axis=-1, name="context")
+            context_size = self.params["encode_text_dim"] * 0 + \
+                           self.params["embedding_dim"] * 4 + \
+                           self.params["item_condition_size"] + \
+                           self.params["shipping_size"] + \
+                           self.params["num_vars_size"]
+
+            feature_dim = context_size + self.params["encode_text_dim"]
+            # context = None
+            feature_dim = self.params["encode_text_dim"]
