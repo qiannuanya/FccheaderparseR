@@ -214,3 +214,17 @@ class XNN(object):
                                        mask_zero=self.params["embedding_mask_zero"],
                                        training=self.training,
                                        seed=self.params["random_seed"],
+                                       name="att_seq_item_desc_attend")
+            if self.params["encode_text_dim"] != self.params["embedding_dim"]:
+                att_seq_name = tf.layers.Dense(self.params["embedding_dim"])(att_seq_name)
+                att_seq_item_desc = tf.layers.Dense(self.params["embedding_dim"])(att_seq_item_desc)
+            # since the following use fasttext encode, the `encode_text_dim` is embedding_dim
+            feature_dim = context_size + self.params["embedding_dim"]
+            feature_dim = self.params["embedding_dim"]
+            if self.params["use_bigram"]:
+                att_seq_bigram_item_desc = attend(enc_seq_bigram_item_desc, method=self.params["attend_method"],
+                                                  context=None, feature_dim=feature_dim,
+                                                  sequence_length=self.sequence_length_item_desc,
+                                                  maxlen=self.params["max_sequence_length_item_desc"],
+                                                  mask_zero=self.params["embedding_mask_zero"],
+                                                  training=self.training,
