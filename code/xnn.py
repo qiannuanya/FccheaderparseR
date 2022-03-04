@@ -272,3 +272,21 @@ class XNN(object):
                     # emb_seq_category_name,
                     emb_brand_name,
                     # emb_category_name,
+                    emb_category_name1,
+                    emb_category_name2,
+                    emb_category_name3,
+                    emb_item_condition,
+                    emb_shipping
+
+                ]
+                tmp_common = tf.concat(common_list, axis=1)
+
+                # word level fm for seq_name and others
+                tmp_name = tf.concat([emb_seq_name, tmp_common], axis=1)
+                sum_squared_name = tf.square(tf.reduce_sum(tmp_name, axis=1))
+                squared_sum_name = tf.reduce_sum(tf.square(tmp_name), axis=1)
+                fm_name = 0.5 * (sum_squared_name - squared_sum_name)
+
+                # word level fm for seq_item_desc and others
+                tmp_item_desc = tf.concat([emb_seq_item_desc, tmp_common], axis=1)
+                sum_squared_item_desc = tf.square(tf.reduce_sum(tmp_item_desc, axis=1))
