@@ -248,3 +248,27 @@ class XNN(object):
                 if self.params["encode_text_dim"] != self.params["embedding_dim"]:
                     att_seq_trigram_item_desc = tf.layers.Dense(self.params["embedding_dim"],
                                                                 kernel_initializer=tf.glorot_uniform_initializer(),
+                                                                dtype=tf.float32, bias_initializer=tf.zeros_initializer())(att_seq_trigram_item_desc)
+            feature_dim = context_size + self.params["embedding_dim"]
+            if self.params["use_subword"]:
+                att_seq_subword_item_desc = attend(enc_seq_subword_item_desc, method="ave",
+                                                   context=None, feature_dim=feature_dim,
+                                                   sequence_length=self.sequence_length_item_desc_subword,
+                                                   maxlen=self.params["max_sequence_length_item_desc_subword"],
+                                                   mask_zero=self.params["embedding_mask_zero"],
+                                                   training=self.training,
+                                                   seed=self.params["random_seed"],
+                                                   name="att_seq_subword_item_desc_attend")
+                # reshape
+                if self.params["encode_text_dim"] != self.params["embedding_dim"]:
+                    att_seq_subword_item_desc = tf.layers.Dense(self.params["embedding_dim"],
+                                                                kernel_initializer=tf.glorot_uniform_initializer(),
+                                                                dtype=tf.float32, bias_initializer=tf.zeros_initializer())(att_seq_subword_item_desc)
+
+            deep_list = []
+            if self.params["enable_deep"]:
+                # common
+                common_list = [
+                    # emb_seq_category_name,
+                    emb_brand_name,
+                    # emb_category_name,
