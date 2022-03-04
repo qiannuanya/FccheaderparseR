@@ -228,3 +228,23 @@ class XNN(object):
                                                   maxlen=self.params["max_sequence_length_item_desc"],
                                                   mask_zero=self.params["embedding_mask_zero"],
                                                   training=self.training,
+                                                  seed=self.params["random_seed"],
+                                                  name="att_seq_bigram_item_desc_attend")
+                # reshape
+                if self.params["encode_text_dim"] != self.params["embedding_dim"]:
+                    att_seq_bigram_item_desc = tf.layers.Dense(self.params["embedding_dim"],
+                                                               kernel_initializer=tf.glorot_uniform_initializer(),
+                                                               dtype=tf.float32, bias_initializer=tf.zeros_initializer())(att_seq_bigram_item_desc)
+            if self.params["use_trigram"]:
+                att_seq_trigram_item_desc = attend(enc_seq_trigram_item_desc, method=self.params["attend_method"],
+                                                   context=None, feature_dim=feature_dim,
+                                                   sequence_length=self.sequence_length_item_desc,
+                                                   maxlen=self.params["max_sequence_length_item_desc"],
+                                                   mask_zero=self.params["embedding_mask_zero"],
+                                                   training=self.training,
+                                                   seed=self.params["random_seed"],
+                                                   name="att_seq_trigram_item_desc_attend")
+                # reshape
+                if self.params["encode_text_dim"] != self.params["embedding_dim"]:
+                    att_seq_trigram_item_desc = tf.layers.Dense(self.params["embedding_dim"],
+                                                                kernel_initializer=tf.glorot_uniform_initializer(),
