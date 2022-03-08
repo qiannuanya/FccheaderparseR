@@ -306,3 +306,20 @@ class XNN(object):
                 # if self.params["use_bigram"]:
                 #     deep_list += [att_seq_bigram_item_desc]
                 # # if self.params["use_trigram"]:
+                # #     deep_list += [att_seq_trigram_item_desc]
+                # if self.params["use_subword"]:
+                #     deep_list += [att_seq_subword_item_desc]
+
+            # fm layer
+            fm_list = []
+            if self.params["enable_fm_first_order"]:
+                bias_seq_name = embed(self.seq_name, self.params["MAX_NUM_WORDS"] + 1, 1, reduce_sum=True,
+                                      seed=self.params["random_seed"])
+                bias_seq_item_desc = embed(self.seq_item_desc, self.params["MAX_NUM_WORDS"] + 1, 1, reduce_sum=True,
+                                           seed=self.params["random_seed"])
+                # bias_seq_category_name = embed(self.seq_category_name, self.params["MAX_NUM_WORDS"] + 1, 1, reduce_sum=True,
+                #                                seed=self.params["random_seed"])
+                if self.params["use_bigram"]:
+                    bias_seq_bigram_item_desc = embed(self.seq_bigram_item_desc, self.params["MAX_NUM_BIGRAMS"] + 1, 1,
+                                                      reduce_sum=True, seed=self.params["random_seed"])
+                if self.params["use_trigram"]:
