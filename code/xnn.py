@@ -290,3 +290,19 @@ class XNN(object):
                 # word level fm for seq_item_desc and others
                 tmp_item_desc = tf.concat([emb_seq_item_desc, tmp_common], axis=1)
                 sum_squared_item_desc = tf.square(tf.reduce_sum(tmp_item_desc, axis=1))
+                squared_sum_item_desc = tf.reduce_sum(tf.square(tmp_item_desc), axis=1)
+                fm_item_desc = 0.5 * (sum_squared_item_desc - squared_sum_item_desc)
+
+                #### predict
+                # concat
+                deep_list += [
+                    att_seq_name,
+                    att_seq_item_desc,
+                    context,
+                    fm_name,
+                    fm_item_desc,
+
+                ]
+                # if self.params["use_bigram"]:
+                #     deep_list += [att_seq_bigram_item_desc]
+                # # if self.params["use_trigram"]:
