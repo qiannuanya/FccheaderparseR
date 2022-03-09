@@ -323,3 +323,12 @@ class XNN(object):
                     bias_seq_bigram_item_desc = embed(self.seq_bigram_item_desc, self.params["MAX_NUM_BIGRAMS"] + 1, 1,
                                                       reduce_sum=True, seed=self.params["random_seed"])
                 if self.params["use_trigram"]:
+                    bias_seq_trigram_item_desc = embed(self.seq_trigram_item_desc, self.params["MAX_NUM_TRIGRAMS"] + 1, 1,
+                                                       reduce_sum=True, seed=self.params["random_seed"])
+                if self.params["use_subword"]:
+                    bias_seq_subword_item_desc = embed(self.seq_subword_item_desc, self.params["MAX_NUM_SUBWORDS"] + 1, 1,
+                                                       reduce_sum=True, seed=self.params["random_seed"])
+
+                bias_brand_name = embed(self.brand_name, self.params["MAX_NUM_BRANDS"], 1, flatten=True,
+                                        seed=self.params["random_seed"])
+                # bias_category_name = embed(self.category_name, MAX_NUM_CATEGORIES, 1, flatten=True)
