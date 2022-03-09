@@ -332,3 +332,21 @@ class XNN(object):
                 bias_brand_name = embed(self.brand_name, self.params["MAX_NUM_BRANDS"], 1, flatten=True,
                                         seed=self.params["random_seed"])
                 # bias_category_name = embed(self.category_name, MAX_NUM_CATEGORIES, 1, flatten=True)
+                bias_category_name1 = embed(self.category_name1, self.params["MAX_NUM_CATEGORIES_LST"][0], 1, flatten=True,
+                                            seed=self.params["random_seed"])
+                bias_category_name2 = embed(self.category_name2, self.params["MAX_NUM_CATEGORIES_LST"][1], 1, flatten=True,
+                                            seed=self.params["random_seed"])
+                bias_category_name3 = embed(self.category_name3, self.params["MAX_NUM_CATEGORIES_LST"][2], 1, flatten=True,
+                                            seed=self.params["random_seed"])
+                bias_item_condition = embed(self.item_condition_id, self.params["MAX_NUM_CONDITIONS"] + 1, 1, flatten=True,
+                                            seed=self.params["random_seed"])
+                bias_shipping = embed(self.shipping, self.params["MAX_NUM_SHIPPINGS"], 1, flatten=True,
+                                      seed=self.params["random_seed"])
+
+                fm_first_order_list = [
+                    bias_seq_name,
+                    bias_seq_item_desc,
+                    # bias_seq_category_name,
+                    bias_brand_name,
+                    # bias_category_name,
+                    bias_category_name1,
