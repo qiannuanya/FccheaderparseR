@@ -350,3 +350,31 @@ class XNN(object):
                     bias_brand_name,
                     # bias_category_name,
                     bias_category_name1,
+                    bias_category_name2,
+                    bias_category_name3,
+                    bias_item_condition,
+                    bias_shipping,
+                ]
+                if self.params["use_bigram"]:
+                    fm_first_order_list += [bias_seq_bigram_item_desc]
+                if self.params["use_trigram"]:
+                    fm_first_order_list += [bias_seq_trigram_item_desc]
+                # if self.params["use_subword"]:
+                #     fm_first_order_list += [bias_seq_subword_item_desc]
+                tmp_first_order = tf.concat(fm_first_order_list, axis=1)
+                fm_list.append(tmp_first_order)
+
+            if self.params["enable_fm_second_order"]:
+                # second order
+                emb_list = [
+                    tf.expand_dims(att_seq_name, axis=1),
+                    tf.expand_dims(att_seq_item_desc, axis=1),
+                    # tf.expand_dims(att_seq_category_name, axis=1),
+
+                    emb_brand_name,
+                    # emb_category_name,
+                    emb_category_name1,
+                    emb_category_name2,
+                    emb_category_name3,
+                    emb_item_condition,
+                    emb_shipping,
