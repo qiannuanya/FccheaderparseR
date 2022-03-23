@@ -378,3 +378,14 @@ class XNN(object):
                     emb_category_name3,
                     emb_item_condition,
                     emb_shipping,
+
+                ]
+                if self.params["use_bigram"]:
+                    emb_list += [tf.expand_dims(att_seq_bigram_item_desc, axis=1)]
+                # if self.params["use_trigram"]:
+                #     emb_list += [tf.expand_dims(att_seq_trigram_item_desc, axis=1)]
+                if self.params["use_subword"]:
+                    emb_list += [tf.expand_dims(att_seq_subword_item_desc, axis=1)]
+                emb_concat = tf.concat(emb_list, axis=1)
+                emb_sum_squared = tf.square(tf.reduce_sum(emb_concat, axis=1))
+                emb_squared_sum = tf.reduce_sum(tf.square(emb_concat), axis=1)
