@@ -389,3 +389,14 @@ class XNN(object):
                 emb_concat = tf.concat(emb_list, axis=1)
                 emb_sum_squared = tf.square(tf.reduce_sum(emb_concat, axis=1))
                 emb_squared_sum = tf.reduce_sum(tf.square(emb_concat), axis=1)
+
+                fm_second_order = 0.5 * (emb_sum_squared - emb_squared_sum)
+                fm_list.extend([emb_sum_squared, emb_squared_sum])
+
+            if self.params["enable_fm_second_order"] and self.params["enable_fm_higher_order"]:
+                fm_higher_order = dense_block(fm_second_order, hidden_units=[self.params["embedding_dim"]] * 2,
+                                              dropouts=[0.] * 2, densenet=False, training=self.training, seed=self.params["random_seed"])
+                fm_list.append(fm_higher_order)
+
+            if self.params["enable_deep"]:
+                deep_list.extend(fm_list)
