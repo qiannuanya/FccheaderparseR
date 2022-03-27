@@ -444,3 +444,18 @@ class XNN(object):
                                                 beta2=self.params["beta2"], epsilon=1e-8,
                                                 schedule_decay=self.params["schedule_decay"])
             elif self.params["optimizer_type"] == "adam":
+                self.optimizer = tf.train.AdamOptimizer(learning_rate=self.learning_rate, beta1=self.params["beta1"],
+                                                        beta2=self.params["beta2"], epsilon=1e-8)
+            elif self.params["optimizer_type"] == "lazyadam":
+                self.optimizer = tf.contrib.opt.LazyAdamOptimizer(learning_rate=self.learning_rate,
+                                                                  beta1=self.params["beta1"],
+                                                                  beta2=self.params["beta2"], epsilon=1e-8)
+            elif self.params["optimizer_type"] == "adagrad":
+                self.optimizer = tf.train.AdagradOptimizer(learning_rate=self.learning_rate,
+                                                           initial_accumulator_value=1e-7)
+            elif self.params["optimizer_type"] == "gd":
+                self.optimizer = tf.train.GradientDescentOptimizer(learning_rate=self.learning_rate)
+            elif self.params["optimizer_type"] == "momentum":
+                self.optimizer = tf.train.MomentumOptimizer(learning_rate=self.learning_rate, momentum=0.95)
+            elif self.params["optimizer_type"] == "rmsprop":
+                self.optimizer = tf.train.RMSPropOptimizer(learning_rate=self.learning_rate, decay=0.9, momentum=0.9,
