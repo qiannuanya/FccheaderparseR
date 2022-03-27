@@ -400,3 +400,18 @@ class XNN(object):
 
             if self.params["enable_deep"]:
                 deep_list.extend(fm_list)
+                deep_in = tf.concat(deep_list, axis=-1, name="concat")
+                # dense
+                hidden_units = [self.params["fc_dim"]*4, self.params["fc_dim"]*2, self.params["fc_dim"]]
+                dropouts = [self.params["fc_dropout"]] * len(hidden_units)
+                if self.params["fc_type"] == "fc":
+                    deep_out = dense_block(deep_in, hidden_units=hidden_units, dropouts=dropouts, densenet=False,
+                                           training=self.training, seed=self.params["random_seed"])
+                elif self.params["fc_type"] == "resnet":
+                    deep_out = resnet_block(deep_in, hidden_units=hidden_units, dropouts=dropouts, cardinality=1,
+                                            dense_shortcut=True, training=self.training,
+                                            seed=self.params["random_seed"])
+                elif self.params["fc_type"] == "densenet":
+                    deep_out = dense_block(deep_in, hidden_units=hidden_units, dropouts=dropouts, densenet=True,
+                                           training=self.training, seed=self.params["random_seed"])
+                fm_list.append(deep_out)
