@@ -415,3 +415,32 @@ class XNN(object):
                     deep_out = dense_block(deep_in, hidden_units=hidden_units, dropouts=dropouts, densenet=True,
                                            training=self.training, seed=self.params["random_seed"])
                 fm_list.append(deep_out)
+
+
+            fm_list.append(self.num_vars)
+            fm_list.append(self.item_condition)
+            fm_list.append(tf.cast(self.shipping, tf.float32))
+            out = tf.concat(fm_list, axis=-1)
+
+
+            self.pred = tf.layers.Dense(1, kernel_initializer=tf.glorot_uniform_initializer(self.params["random_seed"]),
+                                        dtype=tf.float32, bias_initializer=tf.zeros_initializer())(out)
+
+            # intermediate meta
+            self.meta = out
+
+            #### loss
+            self.rmse = tf.sqrt(tf.losses.mean_squared_error(self.target, self.pred))
+            # target is normalized, so std is 1
+            # we apply 3 sigma principle
+            std = 1.
+            self.loss = tf.losses.huber_loss(self.target, self.pred, delta=1. * std)
+            # self.loss = self.rmse
+
+            #### optimizer
+            self.learning_rate = tf.placeholder(tf.float32, shape=[], name="learning_rate")
+            if self.params["optimizer_type"] == "nadam":
+                self.optimizer = LazyNadamOptimizer(learning_rate=self.learning_rate, beta1=self.params["beta1"],
+                                                beta2=self.params["beta2"], epsilon=1e-8,
+                                                schedule_decay=self.params["schedule_decay"])
+            elif self.params["optimizer_type"] == "adam":
