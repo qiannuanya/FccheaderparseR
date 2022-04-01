@@ -506,3 +506,17 @@ class XNN(object):
             # self.train_op = self.optimizer.apply_gradients(grads, global_step=self.global_step)
 
             update_ops = tf.get_collection(tf.GraphKeys.UPDATE_OPS)
+            with tf.control_dependencies(update_ops):
+                self.train_op = self.optimizer.minimize(self.loss)#, global_step=self.global_step)
+
+            #### init
+            self.sess, self.saver = self._init_session()
+
+            # save model state to memory
+            # https://stackoverflow.com/questions/46393983/how-can-i-restore-tensors-to-a-past-value-without-saving-the-value-to-disk/46511601
+            # https://stackoverflow.com/questions/33759623/tensorflow-how-to-save-restore-a-model/43333803#43333803
+            # Extract the global varibles from the graph.
+            self.gvars = self.graph.get_collection(tf.GraphKeys.GLOBAL_VARIABLES)
+            # Exract the Assign operations for later use.
+            self.assign_ops = [self.graph.get_operation_by_name(v.op.name + "/Assign") for v in self.gvars]
+            # Extract the initial value ops from each Assign op for later use.
