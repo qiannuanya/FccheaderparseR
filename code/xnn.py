@@ -459,3 +459,22 @@ class XNN(object):
                 self.optimizer = tf.train.MomentumOptimizer(learning_rate=self.learning_rate, momentum=0.95)
             elif self.params["optimizer_type"] == "rmsprop":
                 self.optimizer = tf.train.RMSPropOptimizer(learning_rate=self.learning_rate, decay=0.9, momentum=0.9,
+                                                           epsilon=1e-8)
+            elif self.params["optimizer_type"] == "lazypowersign":
+                self.optimizer = LazyPowerSignOptimizer(learning_rate=self.learning_rate)
+            elif self.params["optimizer_type"] == "lazyaddsign":
+                self.optimizer = LazyAddSignOptimizer(learning_rate=self.learning_rate)
+            elif self.params["optimizer_type"] == "lazyamsgrad":
+                self.optimizer = LazyAMSGradOptimizer(learning_rate=self.learning_rate, beta1=self.params["beta1"],
+                                                  beta2=self.params["beta2"], epsilon=1e-8)
+
+            #### training op
+            """
+            https://stackoverflow.com/questions/35803425/update-only-part-of-the-word-embedding-matrix-in-tensorflow
+            TL;DR: The default implementation of opt.minimize(loss), TensorFlow will generate a sparse update for 
+            word_emb that modifies only the rows of word_emb that participated in the forward pass.
+
+            The gradient of the tf.gather(word_emb, indices) op with respect to word_emb is a tf.IndexedSlices object
+             (see the implementation for more details). This object represents a sparse tensor that is zero everywhere, 
+             except for the rows selected by indices. A call to opt.minimize(loss) calls 
+             AdamOptimizer._apply_sparse(word_emb_grad, word_emb), which makes a call to tf.scatter_sub(word_emb, ...)* 
