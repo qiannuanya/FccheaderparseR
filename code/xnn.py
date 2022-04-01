@@ -478,3 +478,18 @@ class XNN(object):
              (see the implementation for more details). This object represents a sparse tensor that is zero everywhere, 
              except for the rows selected by indices. A call to opt.minimize(loss) calls 
              AdamOptimizer._apply_sparse(word_emb_grad, word_emb), which makes a call to tf.scatter_sub(word_emb, ...)* 
+             that updates only the rows of word_emb that were selected by indices.
+
+            If on the other hand you want to modify the tf.IndexedSlices that is returned by 
+            opt.compute_gradients(loss, word_emb), you can perform arbitrary TensorFlow operations on its indices and 
+            values properties, and create a new tf.IndexedSlices that can be passed to opt.apply_gradients([(word_emb, ...)]). 
+            For example, you could cap the gradients using MyCapper() (as in the example) using the following calls:
+
+            grad, = opt.compute_gradients(loss, word_emb)
+            train_op = opt.apply_gradients(
+                [tf.IndexedSlices(MyCapper(grad.values), grad.indices)])
+            Similarly, you could change the set of indices that will be modified by creating a new tf.IndexedSlices with
+             a different indices.
+
+            * In general, if you want to update only part of a variable in TensorFlow, you can use the tf.scatter_update(), 
+            tf.scatter_add(), or tf.scatter_sub() operators, which respectively set, add to (+=) or subtract from (-=) the 
