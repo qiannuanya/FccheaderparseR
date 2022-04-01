@@ -493,3 +493,16 @@ class XNN(object):
 
             * In general, if you want to update only part of a variable in TensorFlow, you can use the tf.scatter_update(), 
             tf.scatter_add(), or tf.scatter_sub() operators, which respectively set, add to (+=) or subtract from (-=) the 
+            value previously stored in a variable.
+            """
+            # # it's slow
+            # grads = self.optimizer.compute_gradients(self.loss)
+            # for i, (g, v) in enumerate(grads):
+            #     if g is not None:
+            #         if isinstance(g, tf.IndexedSlices):
+            #             grads[i] = (tf.IndexedSlices(tf.clip_by_norm(g.values, self.params["optimizer_clipnorm"]), g.indices), v)
+            #         else:
+            #             grads[i] = (tf.clip_by_norm(g, self.params["optimizer_clipnorm"]), v)
+            # self.train_op = self.optimizer.apply_gradients(grads, global_step=self.global_step)
+
+            update_ops = tf.get_collection(tf.GraphKeys.UPDATE_OPS)
