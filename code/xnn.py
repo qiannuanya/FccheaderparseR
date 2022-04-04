@@ -536,3 +536,22 @@ class XNN(object):
 
     def _save_session(self, dir):
         """Saves session = weights"""
+        _makedirs(self.params["model_dir"])
+        self.saver.save(self.sess, dir)
+
+    def _restore_session(self, dir):
+        self.saver.restore(self.sess, dir)
+
+    def _save_state(self):
+        # Record the current state of the TF global varaibles
+        gvars_state = self.sess.run(self.gvars)
+        self.gvars_state_list.append(gvars_state)
+
+    def _restore_state(self, gvars_state):
+        # Create a dictionary of the iniailizers and stored state of globals.
+        feed_dict = dict(zip(self.init_values, gvars_state))
+        # Use the initializer ops for each variable to load the stored values.
+        self.sess.run(self.assign_ops, feed_dict=feed_dict)
+
+    def _get_batch_index(self, seq, step):
+        n = len(seq)
