@@ -555,3 +555,25 @@ class XNN(object):
 
     def _get_batch_index(self, seq, step):
         n = len(seq)
+        res = []
+        res_append = res.append
+        for i in range(0, n, step):
+            res_append(seq[i:i + step])
+        # last batch
+        if len(res) * step < n:
+            res_append(seq[len(res) * step:])
+        return res
+
+    def _get_feed_dict(self, X, idx, dropout=0.1, training=False):
+        feed_dict = {}
+        feed_dict.update({
+            self.seq_name: X["seq_name"][idx],
+            self.seq_item_desc: X["seq_item_desc"][idx],
+            # self.seq_category_name: X["seq_category_name"][idx],
+            self.brand_name: X["brand_name"][idx],
+            # self.category_name: X["category_name"][idx],
+            self.category_name1: X["category_name1"][idx],
+            self.category_name2: X["category_name2"][idx],
+            self.category_name3: X["category_name3"][idx],
+            self.item_condition: X["item_condition"][idx],
+            self.item_condition_id: X["item_condition_id"][idx],
