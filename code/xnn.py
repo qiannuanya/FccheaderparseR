@@ -520,3 +520,19 @@ class XNN(object):
             # Exract the Assign operations for later use.
             self.assign_ops = [self.graph.get_operation_by_name(v.op.name + "/Assign") for v in self.gvars]
             # Extract the initial value ops from each Assign op for later use.
+            self.init_values = [assign_op.inputs[1] for assign_op in self.assign_ops]
+
+    def _init_session(self):
+        config = tf.ConfigProto(device_count={"gpu": 0})
+        config.gpu_options.allow_growth = True
+        # the following reduce the training time for a snapshot from 180~220s to 100s in kernel
+        config.intra_op_parallelism_threads = 4
+        config.inter_op_parallelism_threads = 4
+        sess = tf.Session(config=config)
+        sess.run(tf.global_variables_initializer())
+        # max_to_keep=None, keep all the models
+        saver = tf.train.Saver(max_to_keep=None)
+        return sess, saver
+
+    def _save_session(self, dir):
+        """Saves session = weights"""
