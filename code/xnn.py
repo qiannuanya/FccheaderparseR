@@ -623,3 +623,23 @@ class XNN(object):
         y = y.reshape(-1, 1)
         start_time = time.time()
         l = y.shape[0]
+        train_idx_shuffle = np.arange(l)
+        epoch_best_ = 4
+        rmsle_best_ = 10.
+        cycle_num = 0
+        decay_steps = self.params["first_decay_steps"]
+        global_step = 0
+        global_step_exp = 0
+        global_step_total = 0
+        snapshot_num = 0
+        learning_rate_need_big_jump = False
+        total_rmse = 0.
+        rmse_decay = 0.9
+        for epoch in range(self.params["epoch"]):
+            print("epoch: %d" % (epoch + 1))
+            np.random.seed(epoch)
+            if snapshot_num >= self.params["snapshot_before_restarts"] and self.params["shuffle_with_replacement"]:
+                train_idx_shuffle = np.random.choice(np.arange(l), l)
+            else:
+                np.random.shuffle(train_idx_shuffle)
+            batches = self._get_batch_index(train_idx_shuffle, self.params["batch_size_train"])
