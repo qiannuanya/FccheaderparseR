@@ -597,3 +597,29 @@ class XNN(object):
 
         if self.params["use_bigram"]:
             feed_dict[self.seq_bigram_item_desc] = X["seq_bigram_item_desc"][idx]
+            if training and dropout > 0:
+                mask = np.random.choice([0, 1], (len(idx), self.params["max_sequence_length_item_desc"]),
+                                        p=[dropout, 1 - dropout])
+                feed_dict[self.seq_bigram_item_desc] *= mask
+
+        if self.params["use_trigram"]:
+            feed_dict[self.seq_trigram_item_desc] = X["seq_trigram_item_desc"][idx]
+            if training and dropout > 0:
+                mask = np.random.choice([0, 1], (len(idx), self.params["max_sequence_length_item_desc"]),
+                                        p=[dropout, 1 - dropout])
+                feed_dict[self.seq_trigram_item_desc] *= mask
+
+        if self.params["use_subword"]:
+            feed_dict[self.seq_subword_item_desc] = X["seq_subword_item_desc"][idx]
+            feed_dict[self.sequence_length_item_desc_subword] = X["sequence_length_item_desc_subword"][idx]
+            if training and dropout > 0:
+                mask = np.random.choice([0, 1], (len(idx), self.params["max_sequence_length_item_desc_subword"]),
+                                        p=[dropout, 1 - dropout])
+                feed_dict[self.seq_subword_item_desc] *= mask
+
+        return feed_dict
+
+    def fit(self, X, y, validation_data=None):
+        y = y.reshape(-1, 1)
+        start_time = time.time()
+        l = y.shape[0]
