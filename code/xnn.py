@@ -577,3 +577,23 @@ class XNN(object):
             self.category_name3: X["category_name3"][idx],
             self.item_condition: X["item_condition"][idx],
             self.item_condition_id: X["item_condition_id"][idx],
+            self.shipping: X["shipping"][idx],
+            self.num_vars: X["num_vars"][idx],
+        })
+        # len
+        feed_dict.update({
+            self.sequence_length_name: X["sequence_length_name"][idx],
+            self.sequence_length_item_desc: X["sequence_length_item_desc"][idx],
+            # self.sequence_length_category_name: X["sequence_length_category_name"][idx],
+        })
+
+        if training and dropout > 0:
+            mask = np.random.choice([0, 1], (len(idx), self.params["max_sequence_length_name"]),
+                                    p=[dropout, 1 - dropout])
+            feed_dict[self.seq_name] *= mask
+            mask = np.random.choice([0, 1], (len(idx), self.params["max_sequence_length_item_desc"]),
+                                    p=[dropout, 1 - dropout])
+            feed_dict[self.seq_item_desc] *= mask
+
+        if self.params["use_bigram"]:
+            feed_dict[self.seq_bigram_item_desc] = X["seq_bigram_item_desc"][idx]
