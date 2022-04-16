@@ -691,3 +691,29 @@ class XNN(object):
 
                 if validation_data is not None and global_step_total % self.params["eval_every_num_update"] == 0:
                     y_pred = self._predict(validation_data[0])
+                    y_valid_inv = self.target_scaler.inverse_transform(validation_data[1])
+                    y_pred_inv = self.target_scaler.inverse_transform(y_pred)
+                    rmsle = rmse(y_valid_inv, y_pred_inv)
+                    self.logger.info("[step-%d] train-rmsle=%.5f, valid-rmsle=%.5f, lr=%.5f [%.1f s]" % (
+                        global_step_total, total_rmse, rmsle, lr, time.time() - start_time))
+                    if rmsle < rmsle_best_:
+                        rmsle_best_ = rmsle
+                        epoch_best_ = epoch + 1
+
+        return rmsle_best_, epoch_best_
+
+    def _predict(self, X):
+        l = X["seq_name"].shape[0]
+        train_idx = np.arange(l)
+        batches = self._get_batch_index(train_idx, self.params["batch_size_inference"])
+        y = np.zeros((l, 1), dtype=np.float32)
+        y_pred = []
+        y_pred_append = y_pred.append
+        for idx in batches:
+            feed_dict = self._get_feed_dict(X, idx)
+            feed_dict[self.target] = y[idx]
+            feed_dict[self.learning_rate] = 1.0
+            feed_dict[self.training] = False
+            pred = self.sess.run((self.pred), feed_dict=feed_dict)
+            y_pred_append(pred)
+        y_pred = np.vstack(y_pred).reshape(-1, 1)
