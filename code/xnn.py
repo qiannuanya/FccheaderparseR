@@ -643,3 +643,17 @@ class XNN(object):
             else:
                 np.random.shuffle(train_idx_shuffle)
             batches = self._get_batch_index(train_idx_shuffle, self.params["batch_size_train"])
+            for i, idx in enumerate(batches):
+                if snapshot_num >= self.params["max_snapshot_num"]:
+                    break
+                if learning_rate_need_big_jump:
+                    learning_rate = self.params["lr_jump_rate"] * self.params["max_lr_exp"]
+                    learning_rate_need_big_jump = False
+                else:
+                    learning_rate = self.params["max_lr_exp"]
+                lr = _exponential_decay(learning_rate=learning_rate,
+                                        global_step=global_step_exp,
+                                        decay_steps=decay_steps,  # self.params["num_update_each_epoch"],
+                                        decay_rate=self.params["lr_decay_each_epoch_exp"])
+                feed_dict = self._get_feed_dict(X, idx, dropout=0.1, training=False)
+                feed_dict[self.target] = y[idx]
