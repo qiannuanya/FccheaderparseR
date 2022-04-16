@@ -657,3 +657,22 @@ class XNN(object):
                                         decay_rate=self.params["lr_decay_each_epoch_exp"])
                 feed_dict = self._get_feed_dict(X, idx, dropout=0.1, training=False)
                 feed_dict[self.target] = y[idx]
+                feed_dict[self.learning_rate] = lr
+                feed_dict[self.training] = True
+                rmse_, opt = self.sess.run((self.rmse, self.train_op), feed_dict=feed_dict)
+                if self.params["RUNNING_MODE"] != "submission":
+                    # scaling rmsle' = (1/scale_) * (raw rmsle)
+                    # raw rmsle = scaling rmsle' * scale_
+                    total_rmse = rmse_decay * total_rmse + (1. - rmse_decay) * rmse_ * (self.target_scaler.scale_)
+                    self.logger.info("[batch-%d] train-rmsle=%.5f, lr=%.5f [%.1f s]" % (
+                        i + 1, total_rmse,
+                        lr, time.time() - start_time))
+                # save model
+                global_step += 1
+                global_step_exp += 1
+                global_step_total += 1
+                if self.params["enable_snapshot_ensemble"]:
+                    if global_step % decay_steps == 0:
+                        cycle_num += 1
+                        if cycle_num % self.params["snapshot_every_num_cycle"] == 0:
+                            snapshot_num += 1
