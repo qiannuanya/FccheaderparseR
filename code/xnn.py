@@ -717,3 +717,26 @@ class XNN(object):
             pred = self.sess.run((self.pred), feed_dict=feed_dict)
             y_pred_append(pred)
         y_pred = np.vstack(y_pred).reshape(-1, 1)
+        return y_pred
+
+    def _merge_gvars_state_list(self):
+        out = self.gvars_state_list[0].copy()
+        for ms in self.gvars_state_list[1:]:
+            for i, m in enumerate(ms):
+                out[i] += m
+        out = [o / float(len(self.gvars_state_list)) for o in out]
+        return out
+
+    def predict(self, X, mode="mean"):
+        if self.params["enable_snapshot_ensemble"]:
+            y = []
+            if mode == "merge":
+                gvars_state = self._merge_gvars_state_list()
+                self._restore_state(gvars_state)
+                y_ = self._predict(X)
+                y.append(y_)
+            else:
+                for i,gvars_state in enumerate(self.gvars_state_list):
+                    print("predict for: %d"%(i+1))
+                    self._restore_state(gvars_state)
+                    y_ = self._predict(X)
