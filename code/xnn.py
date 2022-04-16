@@ -676,3 +676,18 @@ class XNN(object):
                         cycle_num += 1
                         if cycle_num % self.params["snapshot_every_num_cycle"] == 0:
                             snapshot_num += 1
+                            print("snapshot num: %d" % snapshot_num)
+                            self._save_state()
+                            self.logger.info("[model-%d] cycle num=%d, current lr=%.5f [%.5f]" % (
+                                snapshot_num, cycle_num, lr, time.time() - start_time))
+                            # reset global_step and first_decay_steps
+                            decay_steps = self.params["first_decay_steps"]
+                            if self.params["lr_jump_exp"] or snapshot_num >= self.params["snapshot_before_restarts"]:
+                                learning_rate_need_big_jump = True
+                        if snapshot_num >= self.params["snapshot_before_restarts"]:
+                            global_step = 0
+                            global_step_exp = 0
+                            decay_steps *= self.params["t_mul"]
+
+                if validation_data is not None and global_step_total % self.params["eval_every_num_update"] == 0:
+                    y_pred = self._predict(validation_data[0])
