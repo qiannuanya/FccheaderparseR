@@ -740,3 +740,16 @@ class XNN(object):
                     print("predict for: %d"%(i+1))
                     self._restore_state(gvars_state)
                     y_ = self._predict(X)
+                    y.append(y_)
+            if len(y) == 1:
+                y = np.array(y).reshape(-1, 1)
+            else:
+                y = np.hstack(y)
+                if mode == "median":
+                    y = np.median(y, axis=1, keepdims=True)
+                elif mode == "mean":
+                    y = np.mean(y, axis=1, keepdims=True)
+                elif mode == "weight":
+                    y = self.bias + np.dot(y, self.weights)
+                elif mode == "raw":
+                    pass
