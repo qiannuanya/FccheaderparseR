@@ -753,3 +753,7 @@ class XNN(object):
                     y = self.bias + np.dot(y, self.weights)
                 elif mode == "raw":
                     pass
+        else:
+            y = self._predict(X)
+
+        return y
