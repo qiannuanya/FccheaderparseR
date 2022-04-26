@@ -44,3 +44,17 @@
 [2018-02-23 02:46:05,018] INFO:       lr_schedule: cosine_decay_restarts
 [2018-02-23 02:46:05,018] INFO:       max_lr_cosine: 0.005
 [2018-02-23 02:46:05,019] INFO:       max_lr_exp: 0.005
+[2018-02-23 02:46:05,019] INFO:       max_sequence_length_category_name: 10
+[2018-02-23 02:46:05,019] INFO:       max_sequence_length_item_desc: 50
+[2018-02-23 02:46:05,019] INFO:       max_sequence_length_item_desc_subword: 45
+[2018-02-23 02:46:05,019] INFO:       max_sequence_length_name: 10
+[2018-02-23 02:46:05,019] INFO:       max_snapshot_num: 14
+[2018-02-23 02:46:05,019] INFO:       model_dir: ./weights
+[2018-02-23 02:46:05,019] INFO:       n_folds: 1
+[2018-02-23 02:46:05,019] INFO:       n_runs: 2
+[2018-02-23 02:46:05,019] INFO:       num_cycle_each_epoch: 8
+[2018-02-23 02:46:05,019] INFO:       num_vars_size: 3
+[2018-02-23 02:46:05,019] INFO:       optimizer_clipnorm: 1.0
+[2018-02-23 02:46:05,019] INFO:       optimizer_type: nadam
+[2018-02-23 02:46:05,019] INFO:       pad_sequences_padding: post
+[2018-02-23 02:46:05,019] INFO:       pad_sequences_truncating: post
