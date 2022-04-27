@@ -58,3 +58,25 @@
 [2018-02-23 02:46:05,019] INFO:       optimizer_type: nadam
 [2018-02-23 02:46:05,019] INFO:       pad_sequences_padding: post
 [2018-02-23 02:46:05,019] INFO:       pad_sequences_truncating: post
+[2018-02-23 02:46:05,019] INFO:       random_seed: 2018
+[2018-02-23 02:46:05,019] INFO:       rnn_cell_type: gru
+[2018-02-23 02:46:05,019] INFO:       rnn_num_units: 16
+[2018-02-23 02:46:05,019] INFO:       schedule_decay: 0.004
+[2018-02-23 02:46:05,019] INFO:       shipping_size: 1
+[2018-02-23 02:46:05,020] INFO:       shuffle_with_replacement: False
+[2018-02-23 02:46:05,020] INFO:       snapshot_before_restarts: 4
+[2018-02-23 02:46:05,020] INFO:       snapshot_every_epoch: 4
+[2018-02-23 02:46:05,020] INFO:       snapshot_every_num_cycle: 128
+[2018-02-23 02:46:05,020] INFO:       t_mul: 1
+[2018-02-23 02:46:05,020] INFO:       use_bigram: True
+[2018-02-23 02:46:05,020] INFO:       use_subword: False
+[2018-02-23 02:46:05,020] INFO:       use_trigram: True
+[2018-02-23 02:46:05,020] INFO:       validation_ratio: 0.4
+[2018-02-23 02:46:48,379] INFO: [batch-1] train-rmsle=0.07488, lr=0.00500 [0.6 s]
+[2018-02-23 02:46:48,405] INFO: [batch-2] train-rmsle=0.14652, lr=0.00500 [0.7 s]
+[2018-02-23 02:46:48,431] INFO: [batch-3] train-rmsle=0.20133, lr=0.00500 [0.7 s]
+[2018-02-23 02:46:48,457] INFO: [batch-4] train-rmsle=0.25417, lr=0.00499 [0.7 s]
+[2018-02-23 02:46:48,483] INFO: [batch-5] train-rmsle=0.30096, lr=0.00499 [0.8 s]
+[2018-02-23 02:46:48,508] INFO: [batch-6] train-rmsle=0.34126, lr=0.00499 [0.8 s]
+[2018-02-23 02:46:48,533] INFO: [batch-7] train-rmsle=0.37511, lr=0.00499 [0.8 s]
+[2018-02-23 02:46:48,557] INFO: [batch-8] train-rmsle=0.40439, lr=0.00498 [0.8 s]
