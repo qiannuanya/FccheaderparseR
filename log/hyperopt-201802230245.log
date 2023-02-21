@@ -6168,3 +6168,22 @@
 [2018-02-23 02:49:41,715] INFO: [batch-864] train-rmsle=0.25851, lr=0.00450 [174.0 s]
 [2018-02-23 02:49:41,738] INFO: [batch-865] train-rmsle=0.25834, lr=0.00450 [174.0 s]
 [2018-02-23 02:49:41,778] INFO: [model-14] cycle num=28, current lr=0.00450 [174.04581]
+[2018-02-23 02:50:38,904] INFO: valid-rmsle (tf of last 1): 0.41574
+[2018-02-23 02:50:38,908] INFO: valid-rmsle (tf snapshot ensemble with mean of last 1): 0.41574
+[2018-02-23 02:50:38,912] INFO: valid-rmsle (tf of last 2): 0.41488
+[2018-02-23 02:50:38,924] INFO: valid-rmsle (tf snapshot ensemble with mean of last 2): 0.40968
+[2018-02-23 02:50:38,928] INFO: valid-rmsle (tf of last 3): 0.41196
+[2018-02-23 02:50:38,939] INFO: valid-rmsle (tf snapshot ensemble with mean of last 3): 0.40601
+[2018-02-23 02:50:38,944] INFO: valid-rmsle (tf of last 4): 0.41321
+[2018-02-23 02:50:38,955] INFO: valid-rmsle (tf snapshot ensemble with mean of last 4): 0.40387
+[2018-02-23 02:50:38,960] INFO: valid-rmsle (tf of last 5): 0.41272
+[2018-02-23 02:50:38,971] INFO: valid-rmsle (tf snapshot ensemble with mean of last 5): 0.40238
+[2018-02-23 02:50:38,976] INFO: valid-rmsle (tf of last 6): 0.41209
+[2018-02-23 02:50:38,988] INFO: valid-rmsle (tf snapshot ensemble with mean of last 6): 0.40124
+[2018-02-23 02:50:38,992] INFO: valid-rmsle (tf of last 7): 0.40871
+[2018-02-23 02:50:39,005] INFO: valid-rmsle (tf snapshot ensemble with mean of last 7): 0.39970
+[2018-02-23 02:50:39,009] INFO: valid-rmsle (tf of last 8): 0.41117
+[2018-02-23 02:50:39,021] INFO: valid-rmsle (tf snapshot ensemble with mean of last 8): 0.39864
+[2018-02-23 02:50:39,025] INFO: valid-rmsle (tf of last 9): 0.41557
+[2018-02-23 02:50:39,038] INFO: valid-rmsle (tf snapshot ensemble with mean of last 9): 0.39784
+[2018-02-23 02:50:39,042] INFO: valid-rmsle (tf of last 10): 0.41827
