@@ -6222,3 +6222,16 @@
 [2018-02-23 02:50:39,401] INFO:       RUNNING_MODE: validation
 [2018-02-23 02:50:39,401] INFO:       attend_method: ave
 [2018-02-23 02:50:39,401] INFO:       base_lr: 1e-05
+[2018-02-23 02:50:39,401] INFO:       batch_size_inference: 1024
+[2018-02-23 02:50:39,401] INFO:       batch_size_train: 512
+[2018-02-23 02:50:39,401] INFO:       beta1: 0.975
+[2018-02-23 02:50:39,401] INFO:       beta2: 0.999
+[2018-02-23 02:50:39,401] INFO:       cnn_filter_sizes: (2, 3)
+[2018-02-23 02:50:39,402] INFO:       cnn_num_filters: 16
+[2018-02-23 02:50:39,402] INFO:       cnn_timedistributed: False
+[2018-02-23 02:50:39,402] INFO:       embedding_dim: 250
+[2018-02-23 02:50:39,402] INFO:       embedding_dropout: 0.0
+[2018-02-23 02:50:39,402] INFO:       embedding_mask_zero: False
+[2018-02-23 02:50:39,402] INFO:       embedding_mask_zero_subword: False
+[2018-02-23 02:50:39,402] INFO:       enable_deep: True
+[2018-02-23 02:50:39,402] INFO:       enable_fm_first_order: True
