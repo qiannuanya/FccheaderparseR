@@ -6268,3 +6268,16 @@
 [2018-02-23 02:50:39,405] INFO:       pad_sequences_truncating: post
 [2018-02-23 02:50:39,405] INFO:       random_seed: 2018
 [2018-02-23 02:50:39,405] INFO:       rnn_cell_type: gru
+[2018-02-23 02:50:39,405] INFO:       rnn_num_units: 16
+[2018-02-23 02:50:39,405] INFO:       schedule_decay: 0.004
+[2018-02-23 02:50:39,405] INFO:       shipping_size: 1
+[2018-02-23 02:50:39,405] INFO:       shuffle_with_replacement: False
+[2018-02-23 02:50:39,405] INFO:       snapshot_before_restarts: 4
+[2018-02-23 02:50:39,405] INFO:       snapshot_every_epoch: 4
+[2018-02-23 02:50:39,406] INFO:       snapshot_every_num_cycle: 128
+[2018-02-23 02:50:39,406] INFO:       t_mul: 1
+[2018-02-23 02:50:39,406] INFO:       use_bigram: True
+[2018-02-23 02:50:39,406] INFO:       use_subword: False
+[2018-02-23 02:50:39,406] INFO:       use_trigram: True
+[2018-02-23 02:50:39,406] INFO:       validation_ratio: 0.4
+[2018-02-23 02:50:39,406] INFO: time: 274.40406
